@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'Component.dart';
 import 'customwidgets.dart';
 import 'dragTargetComp.dart';
 
@@ -10,8 +11,20 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+
 class _MyHomePageState extends State<MyHomePage> {
-  String c="";
+   Component? selectedComp;
+   void selectComp(Component comp)
+   {
+     setState(() {
+      if(selectedComp!=null)
+      {
+        selectedComp!.edit(false);
+      }
+       selectedComp=comp;
+       selectedComp!.edit(true);
+     });
+   }
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -19,7 +32,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text("Resistor",
         style: TextStyle(color: Colors.white),),
-        backgroundColor: Color.fromRGBO(1, 48, 63, 1),
+        backgroundColor: const Color.fromRGBO(1, 48, 63, 1),
         leading: IconButton(onPressed: ()
         {
 
@@ -47,17 +60,19 @@ class _MyHomePageState extends State<MyHomePage> {
                     height:900,
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: SizedBox(
-                        width:3000,
-                        height: double.infinity,
-                        child: GridView.builder(
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 50), 
-                          itemCount: 900,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context,index){
-                            return const DragTargetComp();
-                            
-                          }),
+                      child: Container(
+                          width:3000,
+                          height: double.infinity,
+                          color:Colors.white,
+                          child: GridView.builder(
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 50), 
+                            itemCount: 900,
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemBuilder: (context,index){
+                              return DragTargetComp(selectComp: selectComp,);
+                              
+                            }),
+                        
                       ),
                     ),
                   ),
