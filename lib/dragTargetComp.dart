@@ -94,8 +94,14 @@ class _DragTargetCompState extends State<DragTargetComp> {
                           child: TextButton(
                               onPressed: () {
                                 setState(() {
-                                comp!.name=name;
-                                comp!.voltage=double.parse(compVal);
+                                  if(name!="")
+                                  {
+                                    comp!.name=name;
+                                  }
+                                  if(compVal!="")
+                                  {
+                                    comp!.voltage=double.parse(compVal);
+                                  }
                                 });
                               },
                               child: const Text(
