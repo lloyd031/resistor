@@ -100,8 +100,18 @@ class _DragTargetCompState extends State<DragTargetComp> {
                                   }
                                   if(compVal!="")
                                   {
-                                    comp!.voltage=double.parse(compVal);
+                                    if(comp!.type=="Resistor")
+                                    {
+                                      comp!.resistance=double.parse(compVal);
+                                    }else if(comp!.type=="Voltage")
+                                    {
+                                      comp!.voltage=double.parse(compVal);
+                                    }else if(comp!.type=="Current")
+                                    {
+                                      comp!.current=double.parse(compVal);
+                                    }
                                   }
+                                  comp!.editing=false;
                                 });
                               },
                               child: const Text(
@@ -196,11 +206,11 @@ class _DragTargetCompState extends State<DragTargetComp> {
             }
         },
         child: Container(
-          /*decoration: (comp!.editing == false)
+          decoration: (comp!.editing == false)
               ? null
               : BoxDecoration(
                   border: Border.all(color: Colors.blueAccent),
-                  borderRadius: BorderRadius.circular(5)),*/
+                  borderRadius: BorderRadius.circular(5)),
           width: 60,
           height: 60,
           child: (comp!.editing == false)
@@ -232,15 +242,15 @@ class _DragTargetCompState extends State<DragTargetComp> {
                     height: 60,
                     child: Center(
                         child: Badge(
-                      label: Text("${comp!.name} = $value"),
-                      backgroundColor: Colors.blueAccent,
-                      alignment: Alignment.topLeft,
-                      child: Image.asset(
-                        'imgs/${comp!.type}.png',
-                        fit: BoxFit.cover,
-                        width: 1000,
-                      ),
-                    )),
+                          label: Text("${comp!.name} = $value"),
+                    backgroundColor: Colors.blueAccent,
+                    alignment: Alignment.topLeft,
+                          child: Image.asset(
+                            'imgs/${comp!.type}.png',
+                            fit: BoxFit.cover,
+                            width: 1000,
+                          ),
+                        )),
                   ),
                   childWhenDragging: Text(""),
                   onDragCompleted: () {
@@ -255,16 +265,11 @@ class _DragTargetCompState extends State<DragTargetComp> {
                     });
                   },
                   child: Center(
-                      child: Badge(
-                    label: Text("${comp!.name} = $value"),
-                    backgroundColor: Colors.blueAccent,
-                    alignment: Alignment.topLeft,
-                    child: Image.asset(
-                      'imgs/${comp!.type}.png',
-                      fit: BoxFit.cover,
-                      width: 1000,
-                    ),
-                  ))),
+                      child: Image.asset(
+                        'imgs/${comp!.type}.png',
+                        fit: BoxFit.cover,
+                        width: 1000,
+                      ))),
         ),
       );
     }
