@@ -14,15 +14,26 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
    Component? selectedComp;
-   void selectComp(Component comp)
+   bool running=false;
+   void run(bool val)
+   {
+    setState(() {
+      running=val;
+    });
+   }
+   void selectComp(Component? comp)
    {
      setState(() {
       if(selectedComp!=null)
       {
         selectedComp!.edit(false);
       }
+      
        selectedComp=comp;
+       if(comp!=null)
+      {
        selectedComp!.edit(true);
+      }
      });
    }
   @override
@@ -39,23 +50,22 @@ class _MyHomePageState extends State<MyHomePage> {
         }, icon: const Icon(Icons.sort),
         color: Colors.white,),
         actions: [
-          IconButton(onPressed: (){}, icon: const Icon(Icons.play_arrow,color: Colors.white,))
+          IconButton(onPressed: (){run((running==false)?true:false);}, icon:  Icon((running==true)?Icons.stop:Icons.play_arrow,color: Colors.white,)),
         ],
       ),
       body: Column(
         children: [
-          const SizedBox(
-                    width: double.maxFinite,
-                    height: 20,
-                   
-                  ),
+          
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
                 children: [
-                  
-                  Container(
+                  const SizedBox(
+                    width: double.maxFinite,
+                    height: 20,
+                  ),
+                  SizedBox(
                     width: double.maxFinite,
                     height:900,
                     child: SingleChildScrollView(
@@ -93,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child:  Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children:  [
+                children:[
                   DraggableButton("Voltage"),
                   DraggableButton("Current"),
                   DraggableButton("Resistor"),

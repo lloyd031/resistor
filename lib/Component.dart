@@ -1,7 +1,9 @@
 class Component
 {
+  int angle=0;
   String type=" ";
   bool editing=false;
+  String name="";
   double? resistance,voltage,current;
   Component(this.type);
   void edit(bool e)
@@ -20,8 +22,5 @@ class Component
   {
     current=val;
   }
-  bool isEditing()
-  {
-    return editing;
-  }
+  
 }
