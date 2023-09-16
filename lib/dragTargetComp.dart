@@ -4,7 +4,9 @@ import 'Component.dart';
 
 class DragTargetComp extends StatefulWidget {
   Function? selectComp;
-  DragTargetComp({super.key, required this.selectComp});
+  Function? addComp;
+  List complist;
+  DragTargetComp({super.key, required this.selectComp,required this.addComp, required this.complist});
 
   @override
   State<DragTargetComp> createState() => _DragTargetCompState();
@@ -23,19 +25,33 @@ class _DragTargetCompState extends State<DragTargetComp> {
               ? "Voltage"
               : "Current";
       showModalBottomSheet(
+        isScrollControlled: true,
+
           context: context,
           builder: (context) {
             return Container(
-              width: double.maxFinite,
-              color: Colors.white,
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 30),
-              child: Column(mainAxisSize: MainAxisSize.max, children: [
-                Text(
-                  "${comp!.type}(${comp!.name})",
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
+              padding: EdgeInsets.all(20),
+              color:Colors.white,
+              child: Column(
+                mainAxisSize: MainAxisSize.min, children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "${comp!.type}(${comp!.name})",
+                      style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                    IconButton(onPressed: (){setState(() {
+                      comp=null;
+                      widget.selectComp!(null);
+                      Navigator.pop(context);
+                    });
+                    
+                    }, icon: const Icon(Icons.delete, color:Colors.redAccent))
+                  ],
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 8,
                 ),
                 Container(
@@ -44,7 +60,7 @@ class _DragTargetCompState extends State<DragTargetComp> {
                   color: const Color.fromRGBO(228, 230, 235, 1),
                   child: Center(
                     child: Transform.rotate(
-                      angle: comp!.angle * 0.0174533,
+                      angle:comp!.angle*0.0174533,
                       child: SizedBox(
                         width: 60,
                         height: 60,
@@ -89,7 +105,7 @@ class _DragTargetCompState extends State<DragTargetComp> {
                       ),
                       Container(
                           width: double.maxFinite,
-                          padding: EdgeInsets.all(8),
+                          padding: const EdgeInsets.all(8),
                           color: Colors.blueAccent,
                           child: TextButton(
                               onPressed: () {
@@ -111,7 +127,8 @@ class _DragTargetCompState extends State<DragTargetComp> {
                                       comp!.current=double.parse(compVal);
                                     }
                                   }
-                                  comp!.editing=false;
+                                  widget.selectComp!(null);
+                                  Navigator.pop(context);
                                 });
                               },
                               child: const Text(
@@ -137,6 +154,7 @@ class _DragTargetCompState extends State<DragTargetComp> {
             comp!.resistance = value.resistance;
             comp!.voltage = value.voltage;
             comp!.current = value.current;
+            comp!.angle=value.angle;
           });
            
             
@@ -152,11 +170,13 @@ class _DragTargetCompState extends State<DragTargetComp> {
             {
               String name=(value.type=="Resistor")?"R":(value.type=="Voltage")?"V":"I";
               comp!.name=name;
+              widget.addComp!(comp);
             }else
             {
               comp!.name=value.name;
+              widget.complist[widget.complist.indexOf(value)]=comp;
+              //widget.complist.elementAt(widget.complist.indexOf(comp));
             }
-          
         }, builder: (
           BuildContext context,
           List<dynamic> accepted,
@@ -198,78 +218,81 @@ class _DragTargetCompState extends State<DragTargetComp> {
               ? "${comp!.voltage}V"
               : "${comp!.current}A";
 
-      return InkWell(
-        onTap: () => {
-          if (comp!.editing == true)
-            {
-              _showCompDetails(),
-            }
-        },
-        child: Container(
-          decoration: (comp!.editing == false)
-              ? null
-              : BoxDecoration(
-                  border: Border.all(color: Colors.blueAccent),
-                  borderRadius: BorderRadius.circular(5)),
-          width: 60,
-          height: 60,
-          child: (comp!.editing == false)
-              ? InkWell(
-                  onTap: () {
-                    widget.selectComp!(comp);
-                  },
-                  child: Center(
-                      child: Badge(
-                    label: Text("${comp!.name} = $value"),
-                    backgroundColor: Colors.blueAccent,
-                    alignment: (comp!.angle == 90 || comp!.angle == 270)
+      return Badge(
+                    label:(comp!.editing==true)? Text(""): Text("${comp!.name} = $value"),
+                    backgroundColor:(comp!.editing==true)? Colors.white: Colors.blueAccent,
+                    alignment: (comp!.angle == -90 || comp!.angle == -270)
                         ? Alignment.centerRight
                         : Alignment.topLeft,
-                    child: Transform.rotate(
-                      angle: comp!.angle * 0.0174533,
-                      child: Image.asset(
-                        'imgs/${comp!.type}.png',
-                        fit: BoxFit.cover,
-                        width: 1000,
-                      ),
-                    ),
-                  )),
-                )
-              : Draggable<Component>(
-                  data: comp,
-                  feedback: Container(
-                    width: 60,
-                    height: 60,
-                    child: Center(
-                        child: Badge(
-                          label: Text("${comp!.name} = $value"),
-                    backgroundColor: Colors.blueAccent,
-                    alignment: Alignment.topLeft,
+                child: Transform.rotate(
+                  angle:comp!.angle*0.0174533,
+          child: InkWell(
+            onTap: () => {
+              if (comp!.editing == true)
+                {
+                  _showCompDetails(),
+                }
+            },
+            child: Container(
+              padding: (comp!.editing == false)
+                  ? null:EdgeInsets.all(4),
+              width: 60,
+              height: 60,
+              child: (comp!.editing == false)
+                  ? InkWell(
+                      onTap: () {
+                        widget.selectComp!(comp);
+                      },
+                      child: Center(
                           child: Image.asset(
                             'imgs/${comp!.type}.png',
                             fit: BoxFit.cover,
                             width: 1000,
-                          ),
-                        )),
-                  ),
-                  childWhenDragging: Text(""),
-                  onDragCompleted: () {
-                    setState(() {
-                      comp!.edit(false);
-                      comp = null;
-                    });
-                  },
-                  onDraggableCanceled: (velocity, offset) {
-                    setState(() {
-                      comp!.edit(false);
-                    });
-                  },
-                  child: Center(
-                      child: Image.asset(
-                        'imgs/${comp!.type}.png',
-                        fit: BoxFit.cover,
-                        width: 1000,
-                      ))),
+                          )),
+                    )
+                  : Draggable<Component>(
+                      data: comp,
+                      feedback: Container(
+                        padding:const EdgeInsets.all(4),
+                        width: 60,
+                        height: 60,
+                        child: Center(
+                            child: Opacity(
+                            opacity: 0.7,
+                              child: Transform.rotate(
+                                angle: comp!.angle*0.0174533,
+                                child: Image.asset(
+                                  'imgs/${comp!.type}.png',
+                                  fit: BoxFit.cover,
+                                  width: 1000,
+                                ),
+                              ),
+                            )),
+                      ),
+                      childWhenDragging: Text(""),
+                      onDragCompleted: () {
+                        setState(() {
+                          widget.selectComp!(null);
+                          comp = null;
+                        });
+                        
+                      },
+                      onDraggableCanceled: (velocity, offset) {
+                        setState(() {
+                          comp!.edit(false);
+                        });
+                      },
+                      child: Center(
+                          child: Opacity(
+                            opacity: 0.7,
+                            child: Image.asset(
+                              'imgs/${comp!.type}.png',
+                              fit: BoxFit.cover,
+                              width: 1000,
+                            ),
+                          ))),
+            ),
+          ),
         ),
       );
     }
