@@ -1,5 +1,6 @@
 class Component
 {
+  int? index;
   int angle=0;
   String type=" ";
   bool editing=false;

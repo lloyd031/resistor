@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'BFS.dart';
 import 'Component.dart';
 import 'customwidgets.dart';
 import 'dragTargetComp.dart';
@@ -14,20 +15,28 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Component? selectedComp;
   List<Component> complist=[];
-  
+  List<int> blocklist=[];
+  Line? startnode,endnode;
+  setStartandEnd(int i)
+  {
+    if(startnode==null)
+    {
+      startnode=Line(i,null);
+    }else
+    {
+      endnode=Line(i,null);
+      BFS bfs=BFS(startnode,endnode,blocklist);
+      bfs.run(startnode!);
+    }
+  }
   void addComp(Component comp)
   {
     setState(() {
       complist.add(comp);
+      blocklist.add(comp.index!);
     });
   }
-  void p()
-  {
-    for(int i=0; i<complist.length; i++)
-    {
-       print("${complist.elementAt(i).name} = ${complist.elementAt(i).voltage}");
-    }
-  }
+ 
   bool running = false;
   void run(bool val) {
     setState(() {
@@ -87,8 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () {
                       if(running == false)
                        {
-                        print(complist.length);
-                        p();
+                        //print(complist.length);
+                        
                        }
                       run((running == false) ? true : false);
                        
@@ -127,7 +136,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               return DragTargetComp(
-                                selectComp: selectComp, addComp:addComp,complist:complist
+                                selectComp: selectComp, addComp:addComp,complist:complist,blocklist:blocklist, index:index, setStartandEnd: setStartandEnd,
                               );
                             }),
                       ),

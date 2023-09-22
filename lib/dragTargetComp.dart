@@ -6,13 +6,17 @@ class DragTargetComp extends StatefulWidget {
   Function? selectComp;
   Function? addComp;
   List complist;
-  DragTargetComp({super.key, required this.selectComp,required this.addComp, required this.complist});
+  List blocklist;
+  int index;
+  Function? setStartandEnd;
+  DragTargetComp({super.key, required this.selectComp,required this.addComp, required this.complist,required this.blocklist, required this.index,required this.setStartandEnd});
 
   @override
   State<DragTargetComp> createState() => _DragTargetCompState();
 }
 
 class _DragTargetCompState extends State<DragTargetComp> {
+  
   Component? comp;
   String name = "";
   String compVal = "";
@@ -31,7 +35,7 @@ class _DragTargetCompState extends State<DragTargetComp> {
           builder: (context) {
             return Container(
               padding: EdgeInsets.all(20),
-              color:Colors.white,
+              color:Color.fromARGB(255, 122, 80, 80),
               child: Column(
                 mainAxisSize: MainAxisSize.min, children: [
                 Row(
@@ -155,6 +159,7 @@ class _DragTargetCompState extends State<DragTargetComp> {
             comp!.voltage = value.voltage;
             comp!.current = value.current;
             comp!.angle=value.angle;
+            comp!.index=widget.index;
           });
            
             
@@ -175,7 +180,8 @@ class _DragTargetCompState extends State<DragTargetComp> {
             {
               comp!.name=value.name;
               widget.complist[widget.complist.indexOf(value)]=comp;
-              //widget.complist.elementAt(widget.complist.indexOf(comp));
+              widget.blocklist[widget.blocklist.indexOf(value.index)]=widget.index;
+              
             }
         }, builder: (
           BuildContext context,
@@ -244,53 +250,86 @@ class _DragTargetCompState extends State<DragTargetComp> {
                         widget.selectComp!(comp);
                       },
                       child: Center(
-                          child: Image.asset(
-                            'imgs/${comp!.type}.png',
-                            fit: BoxFit.cover,
-                            width: 1000,
-                          )),
-                    )
-                  : Draggable<Component>(
-                      data: comp,
-                      feedback: Container(
-                        padding:const EdgeInsets.all(4),
-                        width: 60,
-                        height: 60,
-                        child: Center(
-                            child: Opacity(
-                            opacity: 0.7,
-                              child: Transform.rotate(
-                                angle: comp!.angle*0.0174533,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              InkWell(
+                                onTap: (){
+                                 widget.setStartandEnd!(comp!.index);
+                                },
+                                child: Container(
+                                  width:6,
+                                  height:6,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(7),
+                                    color:const Color.fromRGBO(1, 48, 63, 1),
+                                  ),
+                                ),
+                              ),
+                              Expanded(
                                 child: Image.asset(
                                   'imgs/${comp!.type}.png',
                                   fit: BoxFit.cover,
                                   width: 1000,
                                 ),
                               ),
-                            )),
-                      ),
-                      childWhenDragging: Text(""),
-                      onDragCompleted: () {
-                        setState(() {
-                          widget.selectComp!(null);
-                          comp = null;
-                        });
-                        
-                      },
-                      onDraggableCanceled: (velocity, offset) {
-                        setState(() {
-                          comp!.edit(false);
-                        });
-                      },
+                              InkWell(
+                                onTap: (){
+                                  widget.setStartandEnd!(comp!.index);
+                                },
+                                child: Container(
+                                  width:6,
+                                  height:6,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(7),
+                                    color:const Color.fromRGBO(1, 48, 63, 1),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )),
+                    )
+                  : Draggable<Component>(
+                    data: comp,
+                    feedback: Container(
+                      padding:const EdgeInsets.all(4),
+                      width: 60,
+                      height: 60,
                       child: Center(
                           child: Opacity(
-                            opacity: 0.7,
-                            child: Image.asset(
-                              'imgs/${comp!.type}.png',
-                              fit: BoxFit.cover,
-                              width: 1000,
+                          opacity: 0.7,
+                            child: Transform.rotate(
+                              angle: comp!.angle*0.0174533,
+                              child: Image.asset(
+                                'imgs/${comp!.type}.png',
+                                fit: BoxFit.cover,
+                                width: 1000,
+                              ),
                             ),
-                          ))),
+                          )),
+                    ),
+                    childWhenDragging: Text(""),
+                    onDragCompleted: () {
+                      setState(() {
+                        widget.selectComp!(null);
+                        comp = null;
+                      });
+                      
+                    },
+                    onDraggableCanceled: (velocity, offset) {
+                      setState(() {
+                        comp!.edit(false);
+                      });
+                    },
+                    child: Center(
+                        child: Opacity(
+                          opacity: 0.7,
+                          child: Image.asset(
+                            'imgs/${comp!.type}.png',
+                            fit: BoxFit.cover,
+                            width: 1000,
+                          ),
+                        ))),
             ),
           ),
         ),

@@ -17,8 +17,8 @@ class _DraggableButtonState extends State<DraggableButton> {
     return Draggable<Component>(
                     data: Component("${widget.imgicon}"),
                     feedback:  SizedBox(
-                    width: 60,
-                    height: 60,
+                    width: 50,
+                    height: 50,
                     child:Center(child:
                     Image.asset('imgs/${widget.imgicon}.png',
                     fit: BoxFit.cover,
