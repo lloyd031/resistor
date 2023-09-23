@@ -149,73 +149,78 @@ class _DragTargetCompState extends State<DragTargetComp> {
     }
 
     if (comp == null) {
-      return SizedBox(
-        width: 60,
-        height: 60,
-        child: DragTarget(onAccept: (Component value) {
-          setState(() {
-            comp = Component("${value.type}");
-            comp!.resistance = value.resistance;
-            comp!.voltage = value.voltage;
-            comp!.current = value.current;
-            comp!.angle=value.angle;
-            comp!.index=widget.index;
-          });
-           
-            
-            if (comp!.type == "Resistor" && value.resistance==null) {
-            comp!.setResistance(6);
-            } else if (comp!.type == "Voltage" && value.voltage==null) {
-            comp!.setVoltage(12);
-            } else if (comp!.type == "Current" && value.current==null) {
-            comp!.setCurrent(24);
-            }
-            
-            if(value.name=="")
-            {
-              String name=(value.type=="Resistor")?"R":(value.type=="Voltage")?"V":"I";
-              comp!.name=name;
-              widget.addComp!(comp);
-            }else
-            {
-              comp!.name=value.name;
-              widget.complist[widget.complist.indexOf(value)]=comp;
-              widget.blocklist[widget.blocklist.indexOf(value.index)]=widget.index;
+      return Badge(
+        label:Text("${widget.index}"),//(comp!.editing==true)? Text(""): Text("${comp!.name} = $value"),
+                    backgroundColor: Colors.blueAccent,
+                    alignment: Alignment.topLeft,
+        child: SizedBox(
+          width: 60,
+          height: 60,
+          child: DragTarget(onAccept: (Component value) {
+            setState(() {
+              comp = Component("${value.type}");
+              comp!.resistance = value.resistance;
+              comp!.voltage = value.voltage;
+              comp!.current = value.current;
+              comp!.angle=value.angle;
+              comp!.index=widget.index;
+            });
+             
               
-            }
-        }, builder: (
-          BuildContext context,
-          List<dynamic> accepted,
-          List<dynamic> rejected,
-        ) {
-          return SizedBox(
-              width: 60,
-              height: 60,
-              child: accepted.isNotEmpty
-                  ? Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: const Color.fromRGBO(228, 230, 235, 1),
-                      ),
-                    )
-                  : InkWell(
-                      onTap: () {
-                        widget.selectComp!(null);
-                      },
-                      child: Container(
+              if (comp!.type == "Resistor" && value.resistance==null) {
+              comp!.setResistance(6);
+              } else if (comp!.type == "Voltage" && value.voltage==null) {
+              comp!.setVoltage(12);
+              } else if (comp!.type == "Current" && value.current==null) {
+              comp!.setCurrent(24);
+              }
+              
+              if(value.name=="")
+              {
+                String name=(value.type=="Resistor")?"R":(value.type=="Voltage")?"V":"I";
+                comp!.name=name;
+                widget.addComp!(comp);
+              }else
+              {
+                comp!.name=value.name;
+                widget.complist[widget.complist.indexOf(value)]=comp;
+                widget.blocklist[widget.blocklist.indexOf(value.index)]=widget.index;
+                
+              }
+          }, builder: (
+            BuildContext context,
+            List<dynamic> accepted,
+            List<dynamic> rejected,
+          ) {
+            return SizedBox(
+                width: 60,
+                height: 60,
+                child: accepted.isNotEmpty
+                    ? Container(
                         width: 60,
                         height: 60,
-                        child: Center(
-                            child: Container(
-                          width: 2,
-                          height: 2,
-                          color: Colors.grey,
-                        )),
-                      ),
-                    ));
-        }),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: const Color.fromRGBO(228, 230, 235, 1),
+                        ),
+                      )
+                    : InkWell(
+                        onTap: () {
+                          widget.selectComp!(null);
+                        },
+                        child: Container(
+                          width: 60,
+                          height: 60,
+                          child: Center(
+                              child: Container(
+                            width: 2,
+                            height: 2,
+                            color: Colors.grey,
+                          )),
+                        ),
+                      ));
+          }),
+        ),
       );
     } else {
       String value = (comp!.type == "Resistor")
@@ -225,7 +230,7 @@ class _DragTargetCompState extends State<DragTargetComp> {
               : "${comp!.current}A";
 
       return Badge(
-                    label:(comp!.editing==true)? Text(""): Text("${comp!.name} = $value"),
+                    label:Text(""),//(comp!.editing==true)? Text(""): Text("${comp!.name} = $value"),
                     backgroundColor:(comp!.editing==true)? Colors.white: Colors.blueAccent,
                     alignment: (comp!.angle == -90 || comp!.angle == -270)
                         ? Alignment.centerRight

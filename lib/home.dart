@@ -27,6 +27,10 @@ class _MyHomePageState extends State<MyHomePage> {
       endnode=Line(i,null);
       BFS bfs=BFS(startnode,endnode,blocklist);
       bfs.run(startnode!);
+      setState(() {
+        startnode=null;
+        endnode=null;
+      });
     }
   }
   void addComp(Component comp)
