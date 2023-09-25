@@ -24,23 +24,38 @@ class _MyHomePageState extends State<MyHomePage> {
     {
       origin=Line(i,null);
     }else{
-      if(i!=origin)
+      if(i!=origin!.index)
       {
       target=Line(i,null);
       LineWire lw=LineWire(origin, target,blocklist);
       for(Line l in lw.result())
       {
-        if(!linelist.contains(linelist.where((element) => element.index==l.index)))
-        { 
-          
-            linelist.add(l);
-          
+        if(inLineList(l.index!)==false)
+        {
+          setState(() {
+          linelist.add(l);
+        });
+        }else{
+          for(Line k in linelist)
+          {
+            if(k.index==l.index)
+            {
+              for(int q=0;q<l.arm.length; q++)
+              {
+                if(l.arm[q]!=null && k.arm[q]==null)
+                {
+                  k.setArm(l.arm[q],q);
+                }
+              }
+            }
+          }
         }
       }
       
       origin=null;
       target=null;
 
+      }
     }
   }
   void addComp(Component comp)
@@ -85,7 +100,6 @@ class _MyHomePageState extends State<MyHomePage> {
  bool inLineList(int index)
  {
    bool inlinlist=false;
-   bool inblocklist=false;
    for(Line i in linelist)
    {
     if(i.index==index)
@@ -95,7 +109,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     
    }
-   for(int i in blocklist)
+   
+   return inlinlist;
+ }
+
+ bool inBlockList(int index)
+ {
+  bool inblocklist=false;
+  for(int i in blocklist)
    {
     if(i==index)
     {
@@ -104,7 +125,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }
     
    }
-   return (inlinlist==true && inblocklist==false)?true:false;
+   return inblocklist;
  }
   @override
   Widget build(BuildContext context) {
@@ -185,7 +206,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             itemCount: 750,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
-                              return (inLineList(index)==true)?LineWireModel(line: getLine(index)):DragTargetComp(
+                              return (inLineList(index)==true && inBlockList(index)==false)?LineWireModel(line: getLine(index)):DragTargetComp(
                                 selectComp: selectComp, addComp:addComp,complist:complist,blocklist:blocklist, index:index, setStartandEnd: setStartandEnd,
                               );
                             }),

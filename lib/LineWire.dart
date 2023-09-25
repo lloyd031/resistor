@@ -26,7 +26,6 @@ class LineWire
     {
       BFS(queue.removeFirst());
     }else{
-      print("done");
       DFS(currNode);
     }
 
@@ -99,25 +98,24 @@ class LineWire
       {
         if(linelist.elementAt(j).index==linelist.elementAt(j+1).index+1)
         {
-          linelist.elementAt(j).setLeft(linelist.elementAt(j+1));
-          linelist.elementAt(j+1).setRight(linelist.elementAt(j));
+          linelist.elementAt(j).setArm(linelist.elementAt(j+1),0);
+          linelist.elementAt(j+1).setArm(linelist.elementAt(j),2);
         }else if(linelist.elementAt(j).index==linelist.elementAt(j+1).index-1)
         {
-          linelist.elementAt(j).setRight(linelist.elementAt(j+1));
-          linelist.elementAt(j+1).setLeft(linelist.elementAt(j));
+          linelist.elementAt(j).setArm(linelist.elementAt(j+1),2);
+          linelist.elementAt(j+1).setArm(linelist.elementAt(j),0);
         }else if(linelist.elementAt(j).index==linelist.elementAt(j+1).index+50)
         {
-          linelist.elementAt(j).setTop(linelist.elementAt(j+1));
-          linelist.elementAt(j+1).setBottom(linelist.elementAt(j));
+          linelist.elementAt(j).setArm(linelist.elementAt(j+1),1);
+          linelist.elementAt(j+1).setArm(linelist.elementAt(j),3);
         }else if(linelist.elementAt(j).index==linelist.elementAt(j+1).index-50)
         {
-          linelist.elementAt(j).setBottom(linelist.elementAt(j+1));
-          linelist.elementAt(j+1).setTop(linelist.elementAt(j));
+          linelist.elementAt(j).setArm(linelist.elementAt(j+1),3);
+          linelist.elementAt(j+1).setArm(linelist.elementAt(j),1);
         }
 
         
       }
-      print("done DFS");
      }
   }
 
@@ -129,22 +127,12 @@ class LineWire
 
 class Line{
   int? index;
-  Line? top, bottom, left,right;
+  //LTRB
+  List arm=[null,null,null,null];
   Line? prev;
   Line(this.index,this.prev);
-  void setLeft(Line left){
-    this.left=left;
-  }
-
-  void setRight(Line right){
-    this.right=right;
-  }
-  void setTop(Line left){
-    this.top=left;
-  }
-
-  void setBottom(Line right){
-    this.bottom=right;
+  void setArm(Line arm,i){
+    this.arm[i]=arm;
   }
 }
 class LineWireModel extends StatefulWidget {
@@ -168,7 +156,7 @@ class _LineWireModelState extends State<LineWireModel> {
                 child: Center(
                   child:Container(
                       width:3,
-                      color:(widget.line!.top!=null)?Colors.blue:Colors.white,
+                      color:(widget.line!.arm[1]!=null)?Colors.blue:Colors.transparent,
                     ),
                 ),
               ),
@@ -177,7 +165,7 @@ class _LineWireModelState extends State<LineWireModel> {
                   Expanded(
                     child: Container(
                       height: 3,
-                      color:(widget.line!.left!=null)?Colors.blue:Colors.white,
+                      color:(widget.line!.arm[0]!=null)?Colors.blue:Colors.transparent,
                     ),
                   ),
                   Container(
@@ -188,7 +176,7 @@ class _LineWireModelState extends State<LineWireModel> {
                   Expanded(
                     child: Container(
                       height: 3,
-                      color:(widget.line!.right!=null)?Colors.blue:Colors.white,
+                      color:(widget.line!.arm[2]!=null)?Colors.blue:Colors.transparent,
                     ),
                   ),
                 ],
@@ -197,7 +185,7 @@ class _LineWireModelState extends State<LineWireModel> {
                 child: Center(
                   child:Container(
                       width:3,
-                      color:(widget.line!.bottom!=null)?Colors.blue:Colors.white,
+                      color:(widget.line!.arm[3]!=null)?Colors.blue:Colors.transparent,
                     ),
                 ),
               ),
