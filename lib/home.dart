@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'BFS.dart';
 import 'Component.dart';
+import 'LineWire.dart';
 import 'customwidgets.dart';
 import 'dragTargetComp.dart';
 
@@ -16,21 +16,31 @@ class _MyHomePageState extends State<MyHomePage> {
   Component? selectedComp;
   List<Component> complist=[];
   List<int> blocklist=[];
-  Line? startnode,endnode;
+  Line? origin,target;
+  List<Line> linelist=[];
   setStartandEnd(int i)
   {
-    if(startnode==null)
+    if(origin==null)
     {
-      startnode=Line(i,null);
-    }else
-    {
-      endnode=Line(i,null);
-      BFS bfs=BFS(startnode,endnode,blocklist);
-      bfs.run(startnode!);
-      setState(() {
-        startnode=null;
-        endnode=null;
-      });
+      origin=Line(i,null);
+    }else{
+      if(i!=origin)
+      {
+      target=Line(i,null);
+      LineWire lw=LineWire(origin, target,blocklist);
+      for(Line l in lw.result())
+      {
+        if(!linelist.contains(linelist.where((element) => element.index==l.index)))
+        { 
+          
+            linelist.add(l);
+          
+        }
+      }
+      
+      origin=null;
+      target=null;
+
     }
   }
   void addComp(Component comp)
@@ -47,7 +57,19 @@ class _MyHomePageState extends State<MyHomePage> {
       running = val;
     });
   }
-
+  Line? getLine(int index)
+  {
+    Line? l;
+    for(Line? i in linelist)
+    {
+      if(i!.index==index)
+      {
+        l=i;
+        i=linelist.last;
+      }
+    }
+    return l;
+  }
   void selectComp(Component? comp) {
     setState(() {
       if (selectedComp != null) {
@@ -60,7 +82,30 @@ class _MyHomePageState extends State<MyHomePage> {
       }
     });
   }
-
+ bool inLineList(int index)
+ {
+   bool inlinlist=false;
+   bool inblocklist=false;
+   for(Line i in linelist)
+   {
+    if(i.index==index)
+    {
+      inlinlist = true;
+      i=linelist.last;
+    }
+    
+   }
+   for(int i in blocklist)
+   {
+    if(i==index)
+    {
+      inblocklist= true;
+      i=blocklist.last;
+    }
+    
+   }
+   return (inlinlist==true && inblocklist==false)?true:false;
+ }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,15 +159,16 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Column(
         children: [
+          const SizedBox(
+                    width: double.maxFinite,
+                    height: 20,
+                  ),
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.vertical,
               child: Column(
                 children: [
-                  const SizedBox(
-                    width: double.maxFinite,
-                    height: 20,
-                  ),
+                  
                   SizedBox(
                     width: double.maxFinite,
                     height: 900,
@@ -136,10 +182,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 50),
-                            itemCount: 900,
+                            itemCount: 750,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
-                              return DragTargetComp(
+                              return (inLineList(index)==true)?LineWireModel(line: getLine(index)):DragTargetComp(
                                 selectComp: selectComp, addComp:addComp,complist:complist,blocklist:blocklist, index:index, setStartandEnd: setStartandEnd,
                               );
                             }),
