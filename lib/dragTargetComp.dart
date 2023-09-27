@@ -20,6 +20,8 @@ class _DragTargetCompState extends State<DragTargetComp> {
   Component? comp;
   String name = "";
   String compVal = "";
+  bool tail=false;
+  bool head=false;
   @override
   Widget build(BuildContext context) {
     void _showCompDetails() {
@@ -35,7 +37,7 @@ class _DragTargetCompState extends State<DragTargetComp> {
           builder: (context) {
             return Container(
               padding: EdgeInsets.all(20),
-              color:Color.fromARGB(255, 122, 80, 80),
+              color:Colors.white,
               child: Column(
                 mainAxisSize: MainAxisSize.min, children: [
                 Row(
@@ -255,15 +257,34 @@ class _DragTargetCompState extends State<DragTargetComp> {
                             children: [
                               InkWell(
                                 onTap: (){
-                                 widget.setStartandEnd!(comp!.index);
+                                 if(comp!.angle==0)
+                                 {
+                                  widget.setStartandEnd!(comp!.index!-1,2,comp!.index!);
+                                 }else if(comp!.angle==-180)
+                                 {
+                                  widget.setStartandEnd!(comp!.index!+1,0,comp!.index!);
+                                 }else if(comp!.angle==-270)
+                                 {
+                                  widget.setStartandEnd!(comp!.index!-50,3,comp!.index!);
+                                 }
+                                 else if(comp!.angle==-90)
+                                 {
+                                  widget.setStartandEnd!(comp!.index!+50,1,comp!.index!);
+                                 }
+                                 setState(() {
+                                   head=true;
+                                 });
                                 },
                                 child: Container(
-                                  width:6,
-                                  height:6,
+                                  width:11,
+                                  height:11,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(7),
-                                    color:const Color.fromRGBO(1, 48, 63, 1),
+                                    borderRadius: BorderRadius.circular(11),
+                                    color:(head==true)?Colors.blue[200]:Colors.white,
+                                    border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                    
                                   ),
+                                  
                                 ),
                               ),
                               Expanded(
@@ -275,15 +296,33 @@ class _DragTargetCompState extends State<DragTargetComp> {
                               ),
                               InkWell(
                                 onTap: (){
-                                  widget.setStartandEnd!(comp!.index);
+                                  if(comp!.angle==0)
+                                 {
+                                  widget.setStartandEnd!(comp!.index!+1,0,comp!.index!);
+                                 }else if(comp!.angle==-180)
+                                 {
+                                  widget.setStartandEnd!(comp!.index!-1,2,comp!.index!);
+                                 }else if(comp!.angle==-270)
+                                 {
+                                  widget.setStartandEnd!(comp!.index!+50,1,comp!.index!);
+                                 }else if(comp!.angle==-90)
+                                 {
+                                  widget.setStartandEnd!(comp!.index!-50,3,comp!.index!);
+                                 }
+                                 setState(() {
+                                   tail=true;
+                                 });
                                 },
                                 child: Container(
-                                  width:6,
-                                  height:6,
+                                  width:11,
+                                  height:11,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(7),
-                                    color:const Color.fromRGBO(1, 48, 63, 1),
+                                    borderRadius: BorderRadius.circular(11),
+                                    color:(tail==true)?Colors.blue[200]:Colors.white,
+                                    border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                    
                                   ),
+                                  
                                 ),
                               ),
                             ],
@@ -300,10 +339,37 @@ class _DragTargetCompState extends State<DragTargetComp> {
                           opacity: 0.7,
                             child: Transform.rotate(
                               angle: comp!.angle*0.0174533,
-                              child: Image.asset(
-                                'imgs/${comp!.type}.png',
-                                fit: BoxFit.cover,
-                                width: 1000,
+                              child: Row(
+                                children: [
+                                  Container(
+                                  width:11,
+                                  height:11,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(11),
+                                    color:Colors.white,
+                                    border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                    
+                                  ),
+                                  
+                                ),
+                                  Expanded(
+                                    child: Image.asset(
+                                      'imgs/${comp!.type}.png',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                  Container(
+                                  width:11,
+                                  height:11,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(11),
+                                    color:Colors.white,
+                                    border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                    
+                                  ),
+                                  
+                                ),
+                                ],
                               ),
                             ),
                           )),
@@ -324,10 +390,37 @@ class _DragTargetCompState extends State<DragTargetComp> {
                     child: Center(
                         child: Opacity(
                           opacity: 0.7,
-                          child: Image.asset(
-                            'imgs/${comp!.type}.png',
-                            fit: BoxFit.cover,
-                            width: 1000,
+                          child: Row(
+                            children: [
+                              Container(
+                                  width:11,
+                                  height:11,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(11),
+                                    color:Colors.white,
+                                    border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                    
+                                  ),
+                                  
+                                ),
+                              Expanded(
+                                child: Image.asset(
+                                  'imgs/${comp!.type}.png',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Container(
+                                  width:11,
+                                  height:11,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(11),
+                                    color:Colors.white,
+                                    border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                    
+                                  ),
+                                  
+                                ),
+                            ],
                           ),
                         ))),
             ),

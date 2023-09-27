@@ -18,18 +18,23 @@ class _MyHomePageState extends State<MyHomePage> {
   List<int> blocklist=[];
   Line? origin,target;
   List<Line> linelist=[];
-  setStartandEnd(int i)
+  setStartandEnd(int i, int arm,int armIndex)
   {
+    
     if(origin==null)
     {
+      Line curr= Line(armIndex,null);
       origin=Line(i,null);
+      origin!.setArm(curr, arm);
     }else{
-      if(i!=origin!.index)
-      {
+      
+        Line curr= Line(armIndex,null);
       target=Line(i,null);
+      target!.setArm(curr,arm);
       LineWire lw=LineWire(origin, target,blocklist);
       for(Line l in lw.result())
       {
+
         if(inLineList(l.index!)==false)
         {
           setState(() {
@@ -57,7 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
       }
     }
-  }
+  
   void addComp(Component comp)
   {
     setState(() {

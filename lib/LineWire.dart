@@ -2,6 +2,8 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 
+import 'Component.dart';
+
 class LineWire
 {
   List<int> blocklist=[];
@@ -26,6 +28,13 @@ class LineWire
     {
       BFS(queue.removeFirst());
     }else{
+      for(int i=0; i<4;i++)
+      {
+        if(currNode.arm[i]==null && target!.arm[i]!=null)
+        {
+          currNode.arm[i]=target!.arm[i];
+        }
+      }
       DFS(currNode);
     }
 
@@ -36,17 +45,17 @@ class LineWire
     {
       validateNeighbor(val.index!-1, val);
     }
-
-    if((val.index!+1)%50!=0)
-    {
-      validateNeighbor(val.index!+1, val);
-    }
     if(val.index!+50<749)
     {
       validateNeighbor(val.index!+50, val);
     }
+    if((val!.index!+1)%50!=0)
+    {
+      validateNeighbor(val.index!+1, val);
+    }
+    
 
-    if(val.index!-50>0)
+    if(val!.index!-50>0)
     {
       validateNeighbor(val.index!-50, val);
     }
@@ -130,8 +139,9 @@ class Line{
   //LTRB
   List arm=[null,null,null,null];
   Line? prev;
+  Component? comp;
   Line(this.index,this.prev);
-  void setArm(Line arm,i){
+  void setArm(Line arm,int i){
     this.arm[i]=arm;
   }
 }
