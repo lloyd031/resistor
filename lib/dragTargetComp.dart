@@ -68,7 +68,7 @@ class _DragTargetCompState extends State<DragTargetComp> {
                     child: Transform.rotate(
                       angle:comp!.angle*0.0174533,
                       child: SizedBox(
-                        width: 60,
+                        width: 40,
                         height: 60,
                         child: Image.asset(
                           'imgs/${comp!.type}.png',
@@ -166,11 +166,11 @@ class _DragTargetCompState extends State<DragTargetComp> {
            
             
             if (comp!.type == "Resistor" && value.resistance==null) {
-            comp!.setResistance(6);
+            comp!.resistance=6;
             } else if (comp!.type == "Voltage" && value.voltage==null) {
-            comp!.setVoltage(12);
+            comp!.voltage=12;
             } else if (comp!.type == "Current" && value.current==null) {
-            comp!.setCurrent(24);
+            comp!.current=24;
             }
             
             if(value.name=="")
@@ -259,25 +259,25 @@ class _DragTargetCompState extends State<DragTargetComp> {
                                 onTap: (){
                                  if(comp!.angle==0)
                                  {
-                                  widget.setStartandEnd!(comp!.index!-1,2,comp!.index!);
+                                  widget.setStartandEnd!(comp!.index!-1,2,comp!.index!,comp,"head");
                                  }else if(comp!.angle==-180)
                                  {
-                                  widget.setStartandEnd!(comp!.index!+1,0,comp!.index!);
+                                  widget.setStartandEnd!(comp!.index!+1,0,comp!.index!,comp,"head");
                                  }else if(comp!.angle==-270)
                                  {
-                                  widget.setStartandEnd!(comp!.index!-50,3,comp!.index!);
+                                  widget.setStartandEnd!(comp!.index!-50,3,comp!.index!,comp,"head");
                                  }
                                  else if(comp!.angle==-90)
                                  {
-                                  widget.setStartandEnd!(comp!.index!+50,1,comp!.index!);
+                                  widget.setStartandEnd!(comp!.index!+50,1,comp!.index!,comp,"head");
                                  }
                                  setState(() {
                                    head=true;
                                  });
                                 },
                                 child: Container(
-                                  width:11,
-                                  height:11,
+                                  width:12,
+                                  height:12,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(11),
                                     color:(head==true)?Colors.blue[200]:Colors.white,
@@ -291,31 +291,30 @@ class _DragTargetCompState extends State<DragTargetComp> {
                                 child: Image.asset(
                                   'imgs/${comp!.type}.png',
                                   fit: BoxFit.cover,
-                                  width: 1000,
                                 ),
                               ),
                               InkWell(
                                 onTap: (){
                                   if(comp!.angle==0)
                                  {
-                                  widget.setStartandEnd!(comp!.index!+1,0,comp!.index!);
+                                  widget.setStartandEnd!(comp!.index!+1,0,comp!.index!,comp,"tail");
                                  }else if(comp!.angle==-180)
                                  {
-                                  widget.setStartandEnd!(comp!.index!-1,2,comp!.index!);
+                                  widget.setStartandEnd!(comp!.index!-1,2,comp!.index!,comp,"tail");
                                  }else if(comp!.angle==-270)
                                  {
-                                  widget.setStartandEnd!(comp!.index!+50,1,comp!.index!);
+                                  widget.setStartandEnd!(comp!.index!+50,1,comp!.index!,comp,"tail");
                                  }else if(comp!.angle==-90)
                                  {
-                                  widget.setStartandEnd!(comp!.index!-50,3,comp!.index!);
+                                  widget.setStartandEnd!(comp!.index!-50,3,comp!.index!,comp,"tail");
                                  }
                                  setState(() {
                                    tail=true;
                                  });
                                 },
                                 child: Container(
-                                  width:11,
-                                  height:11,
+                                  width:12,
+                                  height:12,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(11),
                                     color:(tail==true)?Colors.blue[200]:Colors.white,
@@ -384,7 +383,7 @@ class _DragTargetCompState extends State<DragTargetComp> {
                     },
                     onDraggableCanceled: (velocity, offset) {
                       setState(() {
-                        comp!.edit(false);
+                        comp!.editing=false;
                       });
                     },
                     child: Center(

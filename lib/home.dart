@@ -18,19 +18,40 @@ class _MyHomePageState extends State<MyHomePage> {
   List<int> blocklist=[];
   Line? origin,target;
   List<Line> linelist=[];
-  setStartandEnd(int i, int arm,int armIndex)
+  List<String> pol=["",""];
+  Component? origincomp,targetcomp;
+  bool setStartandEnd(int i, int? arm,int armIndex,Component? comp, String headtail)
   {
-    
+    bool success=false;
     if(origin==null)
     {
+      if(comp!=null)
+      {
       Line curr= Line(armIndex,null);
       origin=Line(i,null);
-      origin!.setArm(curr, arm);
+      origin!.setArm(curr, arm!);
+      this.pol[0]=headtail;
+      origincomp=comp;
+      }
     }else{
       
-        Line curr= Line(armIndex,null);
+      Line curr= Line(armIndex,null);
       target=Line(i,null);
-      target!.setArm(curr,arm);
+      if(arm!=null)
+      {
+        target!.setArm(curr,arm);
+        
+      }
+      
+      if(comp==null)
+      {
+        success=true;
+      }else
+      {
+        pol[1]=headtail;
+        targetcomp=comp;
+        
+      }
       LineWire lw=LineWire(origin, target,blocklist);
       for(Line l in lw.result())
       {
@@ -56,11 +77,49 @@ class _MyHomePageState extends State<MyHomePage> {
           }
         }
       }
-      
+      if(targetcomp!=null)
+      {
+        Component wire=Component("wire");
+        wire.name="Wire";
+        complist.add(wire);
+        wire.addConnection(origincomp!);
+        wire.addConnection(targetcomp!);
+        origincomp!.addConnection(wire);
+        targetcomp!.addConnection(wire);
+        if(pol[0]=="head")
+        {
+          origincomp!.head=wire;
+        }else{
+          origincomp!.tail=wire;
+        }
+
+        if(pol[1]=="head")
+        {
+          targetcomp!.head=wire;
+        }else{
+          targetcomp!.tail=wire;
+        }
+        for(Line j in lw.result())
+        {
+          j.wire=wire;
+        }
+
+      }else
+      {
+        targetcomp!.addConnection(target!.wire);
+        if(pol[0]=="head")
+        {
+          targetcomp!.head=target!.wire;
+        }else
+        {
+          targetcomp!.tail=target!.wire;
+        }
+      }
       origin=null;
       target=null;
 
       }
+      return success;
     }
   
   void addComp(Component comp)
@@ -93,12 +152,12 @@ class _MyHomePageState extends State<MyHomePage> {
   void selectComp(Component? comp) {
     setState(() {
       if (selectedComp != null) {
-        selectedComp!.edit(false);
+        selectedComp!.editing=false;
       }
 
       selectedComp = comp;
       if (comp != null) {
-        selectedComp!.edit(true);
+        selectedComp!.editing=true;
       }
     });
   }
@@ -171,7 +230,13 @@ class _MyHomePageState extends State<MyHomePage> {
                     onPressed: () {
                       if(running == false)
                        {
-                        //print(complist.length);
+                        for(Component i in complist)
+                        {
+                          if(i.connection.length<2)
+                          {
+                            print("incomplete connection at ${i.type} - ${i.name}");
+                          }
+                        }
                         
                        }
                       run((running == false) ? true : false);
@@ -211,7 +276,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             itemCount: 750,
                             physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
-                              return (inLineList(index)==true && inBlockList(index)==false)?LineWireModel(line: getLine(index)):DragTargetComp(
+                              return (inLineList(index)==true && inBlockList(index)==false)?LineWireModel(line: getLine(index),setStartandEnd:setStartandEnd  ):DragTargetComp(
                                 selectComp: selectComp, addComp:addComp,complist:complist,blocklist:blocklist, index:index, setStartandEnd: setStartandEnd,
                               );
                             }),

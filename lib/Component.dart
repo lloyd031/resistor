@@ -5,23 +5,15 @@ class Component
   String type=" ";
   bool editing=false;
   String name="";
+  List<Component> connection=[];
+  Component? tail,head;
   double? resistance,voltage,current;
   Component(this.type);
-  void edit(bool e)
+  
+  void addConnection(Component? comp)
   {
-    editing=e;
+    connection.add(comp!);
   }
-  void setResistance(double val)
-  {
-    resistance=val;
-  }
-  void setVoltage(double val)
-  {
-    voltage=val;
-  }
-  void setCurrent(double val)
-  {
-    current=val;
-  }
+  
   
 }

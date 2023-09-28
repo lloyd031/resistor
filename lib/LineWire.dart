@@ -45,20 +45,21 @@ class LineWire
     {
       validateNeighbor(val.index!-1, val);
     }
+    if(val.index!-50>0)
+    {
+      validateNeighbor(val.index!-50, val);
+    }
     if(val.index!+50<749)
     {
       validateNeighbor(val.index!+50, val);
     }
-    if((val!.index!+1)%50!=0)
+    if((val.index!+1)%50!=0)
     {
       validateNeighbor(val.index!+1, val);
     }
     
 
-    if(val!.index!-50>0)
-    {
-      validateNeighbor(val.index!-50, val);
-    }
+    
   }
 
   void validateNeighbor(int i, prev)
@@ -113,14 +114,14 @@ class LineWire
         {
           linelist.elementAt(j).setArm(linelist.elementAt(j+1),2);
           linelist.elementAt(j+1).setArm(linelist.elementAt(j),0);
-        }else if(linelist.elementAt(j).index==linelist.elementAt(j+1).index+50)
-        {
-          linelist.elementAt(j).setArm(linelist.elementAt(j+1),1);
-          linelist.elementAt(j+1).setArm(linelist.elementAt(j),3);
         }else if(linelist.elementAt(j).index==linelist.elementAt(j+1).index-50)
         {
           linelist.elementAt(j).setArm(linelist.elementAt(j+1),3);
           linelist.elementAt(j+1).setArm(linelist.elementAt(j),1);
+        }else if(linelist.elementAt(j).index==linelist.elementAt(j+1).index+50)
+        {
+          linelist.elementAt(j).setArm(linelist.elementAt(j+1),1);
+          linelist.elementAt(j+1).setArm(linelist.elementAt(j),3);
         }
 
         
@@ -139,69 +140,85 @@ class Line{
   //LTRB
   List arm=[null,null,null,null];
   Line? prev;
-  Component? comp;
+  Component? wire;
   Line(this.index,this.prev);
   void setArm(Line arm,int i){
     this.arm[i]=arm;
   }
+  
 }
 class LineWireModel extends StatefulWidget {
   Line? line;
-  LineWireModel({super.key, required this.line});
+  Function? setStartandEnd;
+  LineWireModel({super.key, required this.line,required this.setStartandEnd});
 
   @override
   State<LineWireModel> createState() => _LineWireModelState();
 }
 
 class _LineWireModelState extends State<LineWireModel> {
+  bool node=false;
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-        width: 60,
-        height: 60,
-        child:Center(
-          child: Column(
-            children: [
-              Expanded(
-                child: Center(
-                  child:Container(
-                      width:3,
-                      color:(widget.line!.arm[1]!=null)?Colors.blue:Colors.transparent,
-                    ),
+    return InkWell(
+      onTap: (){
+        if(widget.setStartandEnd!(widget.line!.index!,null,widget.line!.index!,null,"")==true)
+        {
+          setState(() {
+            node=true;
+          });
+        }
+      },
+      child: SizedBox(
+          width: 60,
+          height: 60,
+          child:Center(
+            child: Column(
+              children: [
+                Expanded(
+                  child: Center(
+                    child:Container(
+                        width:3,
+                        color:(widget.line!.arm[1]!=null)?Colors.blue:Colors.transparent,
+                      ),
+                  ),
                 ),
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 3,
-                      color:(widget.line!.arm[0]!=null)?Colors.blue:Colors.transparent,
+                Row(
+                  children: [
+                    Expanded(
+                      child: Container(
+                        height: 3,
+                        color:(widget.line!.arm[0]!=null)?Colors.blue:Colors.transparent,
+                      ),
                     ),
-                  ),
-                  Container(
-                    width: 3,
-                    height: 3,
-                    color:Colors.blue,
-                  ),
-                  Expanded(
-                    child: Container(
-                      height: 3,
-                      color:(widget.line!.arm[2]!=null)?Colors.blue:Colors.transparent,
+                    Container(
+                      width: (node==true)?12:3,
+                      height: (node==true)?12:3,
+                      decoration: BoxDecoration(
+                        borderRadius:(node==true)?BorderRadius.all(Radius.circular(7)):null,
+                        color:Colors.blue,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Center(
-                  child:Container(
-                      width:3,
-                      color:(widget.line!.arm[3]!=null)?Colors.blue:Colors.transparent,
+                    Expanded(
+                      child: Container(
+                        height: 3,
+                        color:(widget.line!.arm[2]!=null)?Colors.blue:Colors.transparent,
+                      ),
                     ),
+                  ],
                 ),
-              ),
-            ],
-          ),
-        )
+                Expanded(
+                  child: Center(
+                    child:Container(
+                        width:3,
+                        color:(widget.line!.arm[3]!=null)?Colors.blue:Colors.transparent,
+                      ),
+                  ),
+                ),
+              ],
+            ),
+          )
+      ),
     );
   }
 }
