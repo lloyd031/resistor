@@ -34,7 +34,8 @@ class _MyHomePageState extends State<MyHomePage> {
       origincomp=comp;
       }
     }else{
-      
+      if(comp==null || origincomp!.index!=comp.index)
+      {
       Line curr= Line(armIndex,null);
       target=Line(i,null);
       if(arm!=null)
@@ -118,7 +119,9 @@ class _MyHomePageState extends State<MyHomePage> {
       origin=null;
       target=null;
 
+      
       }
+    }
       return success;
     }
   
