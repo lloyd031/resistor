@@ -170,55 +170,55 @@ class _LineWireModelState extends State<LineWireModel> {
         }
       },
       child: SizedBox(
-          width: 60,
-          height: 60,
-          child:Center(
-            child: Column(
-              children: [
-                Expanded(
-                  child: Center(
-                    child:Container(
-                        width:3,
-                        color:(widget.line!.arm[1]!=null)?Colors.blue:Colors.transparent,
-                      ),
+        width: 60,
+        height: 60,
+        child:Center(
+          child: Column(
+            children: [
+              Expanded(
+                child: Center(
+                  child:Container(
+                      width:3,
+                      color:(widget.line!.arm[1]!=null)?Colors.blue:Colors.transparent,
+                    ),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      height: 3,
+                      color:(widget.line!.arm[0]!=null)?Colors.blue:Colors.transparent,
+                    ),
                   ),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Container(
-                        height: 3,
-                        color:(widget.line!.arm[0]!=null)?Colors.blue:Colors.transparent,
-                      ),
+                  Container(
+                    width: (node==true)?12:3,
+                    height:(node==true)?12:3,
+                    decoration: BoxDecoration(
+                      borderRadius:(node==true)?const BorderRadius.all(Radius.circular(7)):null,
+                      color:Colors.blue,
                     ),
-                    Container(
-                      width: (node==true)?12:3,
-                      height: (node==true)?12:3,
-                      decoration: BoxDecoration(
-                        borderRadius:(node==true)?BorderRadius.all(Radius.circular(7)):null,
-                        color:Colors.blue,
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 3,
-                        color:(widget.line!.arm[2]!=null)?Colors.blue:Colors.transparent,
-                      ),
-                    ),
-                  ],
-                ),
-                Expanded(
-                  child: Center(
-                    child:Container(
-                        width:3,
-                        color:(widget.line!.arm[3]!=null)?Colors.blue:Colors.transparent,
-                      ),
                   ),
+                  Expanded(
+                    child: Container(
+                      height: 3,
+                      color:(widget.line!.arm[2]!=null)?Colors.blue:Colors.transparent,
+                    ),
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Center(
+                  child:Container(
+                      width:3,
+                      color:(widget.line!.arm[3]!=null)?Colors.blue:Colors.transparent,
+                    ),
                 ),
-              ],
-            ),
-          )
-      ),
+              ),
+            ],
+          ),
+        )
+        ),
     );
   }
 }

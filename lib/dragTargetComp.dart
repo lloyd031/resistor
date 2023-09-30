@@ -190,33 +190,38 @@ class _DragTargetCompState extends State<DragTargetComp> {
           List<dynamic> accepted,
           List<dynamic> rejected,
         ) {
-          return SizedBox(
-              width: 60,
-              height: 60,
-              child: accepted.isNotEmpty
-                  ? Container(
-                      width: 60,
-                      height: 60,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5),
-                        color: const Color.fromRGBO(228, 230, 235, 1),
-                      ),
-                    )
-                  : InkWell(
-                      onTap: () {
-                        widget.selectComp!(null);
+          return InkWell(
+            onTap: () {
+                        widget.selectComp!(comp);
                       },
-                      child: Container(
+            child: SizedBox(
+                width: 60,
+                height: 60,
+                child: accepted.isNotEmpty
+                    ? Container(
                         width: 60,
                         height: 60,
-                        child: Center(
-                            child: Container(
-                          width: 2,
-                          height: 2,
-                          color: Colors.grey,
-                        )),
-                      ),
-                    ));
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: const Color.fromRGBO(228, 230, 235, 1),
+                        ),
+                      )
+                    : InkWell(
+                        onTap: () {
+                          widget.selectComp!(null);
+                        },
+                        child: Container(
+                          width: 60,
+                          height: 60,
+                          child: Center(
+                              child: Container(
+                            width: 2,
+                            height: 2,
+                            color: Colors.grey,
+                          )),
+                        ),
+                      )),
+          );
         }),
       );
     } else {
@@ -226,9 +231,9 @@ class _DragTargetCompState extends State<DragTargetComp> {
               ? "${comp!.voltage}V"
               : "${comp!.current}A";
 
-      return Badge(
-                    label:(comp!.editing==true)? Text(""): Text("${comp!.name} = $value"),
-                    backgroundColor:(comp!.editing==true)? Colors.white: Colors.blueAccent,
+      return  Badge(
+                    label:(comp!.editing==true || comp!.type=="ground")? Text(""): Text("${comp!.name} = $value"),
+                    backgroundColor:(comp!.editing==true  || comp!.type=="ground")? Colors.transparent: Colors.blueAccent,
                     alignment: (comp!.angle == -90 || comp!.angle == -270)
                         ? Alignment.centerRight
                         : Alignment.topLeft,
@@ -252,7 +257,49 @@ class _DragTargetCompState extends State<DragTargetComp> {
                         widget.selectComp!(comp);
                       },
                       child: Center(
-                          child: Row(
+                          child: (comp!.type=="ground")?Row(
+                            children:[
+                              
+                              SizedBox(
+                                width:30,
+                                child: Image.asset(
+                                  'imgs/${comp!.type}.png',
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              InkWell(
+                                onTap: (){
+                                  if(comp!.angle==0)
+                                 {
+                                  widget.setStartandEnd!(comp!.index!+1,0,comp!.index!,comp,"tail");
+                                 }else if(comp!.angle==-180)
+                                 {
+                                  widget.setStartandEnd!(comp!.index!-1,2,comp!.index!,comp,"tail");
+                                 }else if(comp!.angle==-270)
+                                 {
+                                  widget.setStartandEnd!(comp!.index!+50,1,comp!.index!,comp,"tail");
+                                 }else if(comp!.angle==-90)
+                                 {
+                                  widget.setStartandEnd!(comp!.index!-50,3,comp!.index!,comp,"tail");
+                                 }
+                                 setState(() {
+                                   tail=true;
+                                 });
+                                },
+                                child: Container(
+                                  width:12,
+                                  height:12,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(11),
+                                    color:(tail==true)?Colors.blue[200]:Colors.white,
+                                    border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                    
+                                  ),
+                                  
+                                ),
+                              ),
+                            ]
+                          ):Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               InkWell(
