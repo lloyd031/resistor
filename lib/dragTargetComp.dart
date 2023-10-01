@@ -31,8 +31,6 @@ class _DragTargetCompState extends State<DragTargetComp> {
               ? "Voltage"
               : "Current";
       showModalBottomSheet(
-        isScrollControlled: true,
-
           context: context,
           builder: (context) {
             return Container(
@@ -49,8 +47,9 @@ class _DragTargetCompState extends State<DragTargetComp> {
                           fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     IconButton(onPressed: (){setState(() {
+                      widget.complist.remove(comp); 
+                      widget.blocklist.remove(comp!.index);
                       comp=null;
-                      widget.selectComp!(null);
                       Navigator.pop(context);
                     });
                     
@@ -258,10 +257,10 @@ class _DragTargetCompState extends State<DragTargetComp> {
                       },
                       child: Center(
                           child: (comp!.type=="ground")?Row(
+                            mainAxisAlignment:MainAxisAlignment.end,
                             children:[
-                              
                               SizedBox(
-                                width:30,
+                                width:20,
                                 child: Image.asset(
                                   'imgs/${comp!.type}.png',
                                   fit: BoxFit.cover,
@@ -271,16 +270,16 @@ class _DragTargetCompState extends State<DragTargetComp> {
                                 onTap: (){
                                   if(comp!.angle==0)
                                  {
-                                  widget.setStartandEnd!(comp!.index!+1,0,comp!.index!,comp,"tail");
+                                  widget.setStartandEnd!(comp!.index!+1,0,comp!.index!,comp,"tail",null);
                                  }else if(comp!.angle==-180)
                                  {
-                                  widget.setStartandEnd!(comp!.index!-1,2,comp!.index!,comp,"tail");
+                                  widget.setStartandEnd!(comp!.index!-1,2,comp!.index!,comp,"tail",null);
                                  }else if(comp!.angle==-270)
                                  {
-                                  widget.setStartandEnd!(comp!.index!+50,1,comp!.index!,comp,"tail");
+                                  widget.setStartandEnd!(comp!.index!+50,1,comp!.index!,comp,"tail",null);
                                  }else if(comp!.angle==-90)
                                  {
-                                  widget.setStartandEnd!(comp!.index!-50,3,comp!.index!,comp,"tail");
+                                  widget.setStartandEnd!(comp!.index!-50,3,comp!.index!,comp,"tail",null);
                                  }
                                  setState(() {
                                    tail=true;
@@ -306,17 +305,17 @@ class _DragTargetCompState extends State<DragTargetComp> {
                                 onTap: (){
                                  if(comp!.angle==0)
                                  {
-                                  widget.setStartandEnd!(comp!.index!-1,2,comp!.index!,comp,"head");
+                                  widget.setStartandEnd!(comp!.index!-1,2,comp!.index!,comp,"head",null);
                                  }else if(comp!.angle==-180)
                                  {
-                                  widget.setStartandEnd!(comp!.index!+1,0,comp!.index!,comp,"head");
+                                  widget.setStartandEnd!(comp!.index!+1,0,comp!.index!,comp,"head",null);
                                  }else if(comp!.angle==-270)
                                  {
-                                  widget.setStartandEnd!(comp!.index!-50,3,comp!.index!,comp,"head");
+                                  widget.setStartandEnd!(comp!.index!-50,3,comp!.index!,comp,"head",null);
                                  }
                                  else if(comp!.angle==-90)
                                  {
-                                  widget.setStartandEnd!(comp!.index!+50,1,comp!.index!,comp,"head");
+                                  widget.setStartandEnd!(comp!.index!+50,1,comp!.index!,comp,"head",null);
                                  }
                                  setState(() {
                                    head=true;
@@ -344,16 +343,16 @@ class _DragTargetCompState extends State<DragTargetComp> {
                                 onTap: (){
                                   if(comp!.angle==0)
                                  {
-                                  widget.setStartandEnd!(comp!.index!+1,0,comp!.index!,comp,"tail");
+                                  widget.setStartandEnd!(comp!.index!+1,0,comp!.index!,comp,"tail",null);
                                  }else if(comp!.angle==-180)
                                  {
-                                  widget.setStartandEnd!(comp!.index!-1,2,comp!.index!,comp,"tail");
+                                  widget.setStartandEnd!(comp!.index!-1,2,comp!.index!,comp,"tail",null);
                                  }else if(comp!.angle==-270)
                                  {
-                                  widget.setStartandEnd!(comp!.index!+50,1,comp!.index!,comp,"tail");
+                                  widget.setStartandEnd!(comp!.index!+50,1,comp!.index!,comp,"tail",null);
                                  }else if(comp!.angle==-90)
                                  {
-                                  widget.setStartandEnd!(comp!.index!-50,3,comp!.index!,comp,"tail");
+                                  widget.setStartandEnd!(comp!.index!-50,3,comp!.index!,comp,"tail",null);
                                  }
                                  setState(() {
                                    tail=true;
@@ -385,7 +384,7 @@ class _DragTargetCompState extends State<DragTargetComp> {
                           opacity: 0.7,
                             child: Transform.rotate(
                               angle: comp!.angle*0.0174533,
-                              child: Row(
+                              child:(comp!.type=="ground")?GroundModel(comp: comp, tail: tail,): Row(
                                 children: [
                                   Container(
                                   width:11,
@@ -436,7 +435,7 @@ class _DragTargetCompState extends State<DragTargetComp> {
                     child: Center(
                         child: Opacity(
                           opacity: 0.7,
-                          child: Row(
+                          child: (comp!.type=="ground")?GroundModel(comp: comp, tail: tail,): Row(
                             children: [
                               Container(
                                   width:11,
@@ -474,5 +473,38 @@ class _DragTargetCompState extends State<DragTargetComp> {
         ),
       );
     }
+  }
+}
+
+class GroundModel extends StatelessWidget {
+  Component? comp;
+  bool? tail;
+  GroundModel({super.key,required this.comp ,required this.tail});
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+                                mainAxisAlignment:MainAxisAlignment.end,
+                                children:[
+                                  SizedBox(
+                                    width:20,
+                                    child: Image.asset(
+                                      'imgs/${(comp!=null)?comp!.type:"ground"}.png',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                 Container(
+                                   width:12,
+                                   height:12,
+                                   decoration: BoxDecoration(
+                                     borderRadius: BorderRadius.circular(11),
+                                     color:(tail==true)?Colors.blue[200]:Colors.white,
+                                     border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                     
+                                   ),
+                                   
+                                 ), 
+                                ]
+                              );
   }
 }

@@ -162,7 +162,7 @@ class _LineWireModelState extends State<LineWireModel> {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: (){
-        if(widget.setStartandEnd!(widget.line!.index!,null,widget.line!.index!,null,"")==true)
+        if(widget.setStartandEnd!(widget.line!.index!,null,widget.line!.index!,null,"",widget.line)==true)
         {
           setState(() {
             node=true;

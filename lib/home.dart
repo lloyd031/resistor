@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:resistor/shared/loading.dart';
 
 import 'Component.dart';
 import 'LineWire.dart';
@@ -19,8 +20,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Line? origin,target;
   List<Line> linelist=[];
   List<String> pol=["",""];
+   bool loading=false;
   Component? origincomp,targetcomp;
-  bool setStartandEnd(int i, int? arm,int armIndex,Component? comp, String headtail)
+  
+  bool setStartandEnd(int i, int? arm,int armIndex,Component? comp, String headtail,Line? line)
   {
     bool success=false;
     if(origin==null)
@@ -28,20 +31,25 @@ class _MyHomePageState extends State<MyHomePage> {
       if(comp!=null)
       {
       Line curr= Line(armIndex,null);
-      origin=Line(i,null);
+      setState(() {
+      setState(() {
+        origin=Line(i,null);
+      });
       origin!.setArm(curr, arm!);
       this.pol[0]=headtail;
       origincomp=comp;
+      });
       }
     }else{
       if(comp==null || origincomp!.index!=comp.index)
       {
       Line curr= Line(armIndex,null);
-      target=Line(i,null);
+      setState(() {
+        target=Line(i,null);
+      });
       if(arm!=null)
       {
         target!.setArm(curr,arm);
-        
       }
       
       if(comp==null)
@@ -51,7 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
       {
         pol[1]=headtail;
         targetcomp=comp;
-        
       }
       LineWire lw=LineWire(origin, target,blocklist);
       for(Line l in lw.result())
@@ -104,33 +111,51 @@ class _MyHomePageState extends State<MyHomePage> {
         {
           j.wire=wire;
         }
-
+        if(targetcomp!.type=="ground" || origincomp!.type=="ground")
+        {
+          wire.reference=true;
+        }
+       targetcomp=null;
       }else
       {
-        targetcomp!.addConnection(target!.wire);
+        line!.wire!.addConnection(origincomp);
+        origincomp!.addConnection(line.wire);
         if(pol[0]=="head")
         {
-          targetcomp!.head=target!.wire;
+          origincomp!.head=target!.wire;
         }else
         {
-          targetcomp!.tail=target!.wire;
+          origincomp!.tail=target!.wire;
+        }
+
+        if(origincomp!.type=="ground")
+        {
+          line.wire!.reference=true;
         }
       }
+      setState(() {
       origin=null;
       target=null;
-
-      
+      });
+     
       }
     }
+    
+    
       return success;
     }
-  
+  void _showRes()
+  {
+    showModalBottomSheet(context: context, builder:(context){
+      return Loading(complist);
+    });
+  }
   void addComp(Component comp)
   {
-    setState(() {
+    
       complist.add(comp);
       blocklist.add(comp.index!);
-    });
+    
   }
  
   bool running = false;
@@ -179,7 +204,7 @@ class _MyHomePageState extends State<MyHomePage> {
    
    return inlinlist;
  }
-
+ 
  bool inBlockList(int index)
  {
   bool inblocklist=false;
@@ -194,8 +219,10 @@ class _MyHomePageState extends State<MyHomePage> {
    }
    return inblocklist;
  }
+
   @override
   Widget build(BuildContext context) {
+   
     return Scaffold(
       backgroundColor: const Color.fromRGBO(241, 242, 246, 1),
       appBar: AppBar(
@@ -230,17 +257,14 @@ class _MyHomePageState extends State<MyHomePage> {
               ]
             : [
                 IconButton(
-                    onPressed: () {
+                    onPressed: (){
                       if(running == false)
                        {
-                        for(Component i in complist)
-                        {
-                          if(i.connection.length<2)
-                          {
-                            print("incomplete connection at ${i.type} - ${i.name}");
-                          }
-                        }
-                        
+                        setState((){
+                          loading=true;
+                        });
+                        _showRes();
+                         
                        }
                       run((running == false) ? true : false);
                        
