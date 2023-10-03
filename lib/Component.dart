@@ -7,14 +7,24 @@ class Component
   String name="";
   List<Component> connection=[];
   Component? tail,head;
-  double? resistance,voltage,current;
+  double resistance=0,voltage=0,current=0;
   bool reference=false;
+  Component? branch;
+  List<Component> eqn=[];
   Component(this.type)
   {
     if(this.type=="ground")
   {
     angle=-90;
   }
+  if (type == "Resistor" ) {
+      resistance=6;
+    } else if (type == "Voltage") {
+          voltage=12;
+    } else if (type == "Current" ) {
+            current=24;
+            }
+            
   }
   
   void addConnection(Component? comp)

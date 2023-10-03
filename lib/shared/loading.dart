@@ -32,6 +32,8 @@ class _LoadingState extends State<Loading> {
     {
        NodalAnalysis nodalAnalysis=NodalAnalysis(widget.complist);
        nodalAnalysis.definNodes();
+       nodalAnalysis.defineBranches();
+       nodalAnalysis.solveVR();
     }
     }
     r();

@@ -164,13 +164,6 @@ class _DragTargetCompState extends State<DragTargetComp> {
           });
            
             
-            if (comp!.type == "Resistor" && value.resistance==null) {
-            comp!.resistance=6;
-            } else if (comp!.type == "Voltage" && value.voltage==null) {
-            comp!.voltage=12;
-            } else if (comp!.type == "Current" && value.current==null) {
-            comp!.current=24;
-            }
             
             if(value.name=="")
             {
