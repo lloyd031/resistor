@@ -10,6 +10,7 @@ class Component
   double resistance=0,voltage=0,current=0;
   bool reference=false;
   Component? branch;
+  int kclindex=0;
   List<Component> eqn=[];
   Component(this.type)
   {

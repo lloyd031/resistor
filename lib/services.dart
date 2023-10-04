@@ -92,8 +92,9 @@ class NodalAnalysis
 
   
    
-  void solveVR()
+  Future<String> solveVRI()
   {
+    String err="";
     String connection="";
     print("you got ${branchlist.length}");
     for(Component i in branchlist)
@@ -112,6 +113,20 @@ class NodalAnalysis
           }else{
             i.voltage-=i.connection[j].voltage;
           }
+        }else if(i.connection[j].type=="Current")
+        {
+          if(i.current==0)
+          {
+            if(i.connection[j].head==i.connection[j-1])
+          {
+            i.current+=i.connection[j].current;
+          }else{
+            i.current-=i.connection[j].current;
+          }
+          }else
+          {
+            err="Series current source connected";
+          }
         }
       }
       
@@ -123,13 +138,38 @@ class NodalAnalysis
       print(connection);
       connection="";
     }
+    return Future.delayed(Duration(microseconds: 500),()=>err);
   }
   
-  
-double add(double a, double b)
+
+ void assignVoltages()
+ {
+    for(Component i in branchlist)
+    {
+      if(i.connection.last.reference==true)
+        {
+          if(i.voltage !=0 && i.resistance==0 && i.current==0)
+          {
+            
+              if(i.connection.first.voltage==0)
+              {
+                i.connection.first.voltage=i.voltage;
+                node.remove(i.connection.first);
+              }
+          }
+        }
+    }
+    
+
+ }
+
+void setKCLIndex()
 {
-  double sum = a+b;
-  return sum;
+  for(int i=0; i<node.length; i++)
+  {
+    node[i].kclindex=i;
+  }
 }
+
 
 }

@@ -33,7 +33,18 @@ class _LoadingState extends State<Loading> {
        NodalAnalysis nodalAnalysis=NodalAnalysis(widget.complist);
        nodalAnalysis.definNodes();
        nodalAnalysis.defineBranches();
-       nodalAnalysis.solveVR();
+       dynamic solveVRI=await nodalAnalysis.solveVRI();
+        if(solveVRI!="")
+        {
+          setState(() {
+            loading=false;
+            errlist.add(solveVRI);
+          });
+        }else
+        {
+          nodalAnalysis.assignVoltages();
+          nodalAnalysis.setKCLIndex();
+        }
     }
     }
     r();
