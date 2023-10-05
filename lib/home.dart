@@ -115,9 +115,12 @@ class _MyHomePageState extends State<MyHomePage> {
         {
           wire.reference=true;
         }
-       targetcomp=null;
       }else
       {
+        for(Line j in lw.result())
+        {
+          j.wire=line!.wire;
+        }
         line!.wire!.addConnection(origincomp);
         origincomp!.addConnection(line.wire);
         if(pol[0]=="head")
@@ -134,6 +137,8 @@ class _MyHomePageState extends State<MyHomePage> {
         }
       }
       setState(() {
+      origincomp=null;
+      targetcomp=null;
       origin=null;
       target=null;
       });

@@ -10,6 +10,7 @@ class CheckErr
 {
   List<String> err=[];
   bool hasGround=false;
+  
   if(complist!.isNotEmpty)
   {
     for(int i=0; i<complist!.length; i++)
@@ -39,6 +40,7 @@ class NodalAnalysis
   NodalAnalysis(this.complist);
   List node=[];
   List branchlist=[];
+  var matrix;
   Component? currNode;
   void definNodes()
   {
@@ -158,9 +160,11 @@ class NodalAnalysis
               }
           }
         }
+
+
     }
     
-
+    setKCLIndex();
  }
 
 void setKCLIndex()
@@ -169,6 +173,20 @@ void setKCLIndex()
   {
     node[i].kclindex=i;
   }
+  setMatrix();
+}
+
+void setMatrix()
+{
+ matrix = List<List>.generate(node.length, (i) => List<dynamic>.generate(node.length+1, (index) => null, growable: false), growable: false);
+ for(int i=0; i<node.length; i++)
+ {
+  for(int j=0; j<node.length+1; j++)
+ {
+  matrix[i][j]=0;
+ }
+ }
+ print(matrix);
 }
 
 

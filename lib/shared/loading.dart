@@ -43,7 +43,6 @@ class _LoadingState extends State<Loading> {
         }else
         {
           nodalAnalysis.assignVoltages();
-          nodalAnalysis.setKCLIndex();
         }
     }
     }
