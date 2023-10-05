@@ -40,10 +40,17 @@ class Component
     {
       if(i.current==0)
       {
-        kcleqn[kclindex]=(i.connection.first==this)?1/i.resistance:(1/i.resistance)*-1;
+        kcleqn[kclindex]+=(i.connection.first==this)?(1/i.resistance*-1):(1/i.resistance);
         if(i.voltage!=0)
         {
-         i.kcleqn[kcleqn.length]=(i.connection.first==this)?(i.voltage)*-1:i.voltage;
+         kcleqn.last+=(i.connection.first==this)?(i.voltage/i.resistance)*-1:i.voltage/i.resistance;
+        }
+        if(i.connection.last!=this && i.connection.last.voltage!=0)
+        {
+          kcleqn.last+=(i.connection.last.voltage/i.resistance)*-1;
+        }else if(i.connection.first!=this && i.connection.first.voltage!=0)
+        {
+          kcleqn.last+=(i.connection.first.voltage/i.resistance);
         }
       }
     }
