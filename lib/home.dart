@@ -235,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
           "Resistor",
           style: TextStyle(color: Colors.white),
         ),
-        backgroundColor: const Color.fromRGBO(1, 48, 63, 1),
+        backgroundColor: const Color.fromRGBO(1,171,230,1),
         leading: IconButton(
           onPressed: () {},
           icon: const Icon(Icons.sort),
@@ -325,7 +325,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
           Container(
             width: double.maxFinite,
-            color: const Color.fromRGBO(1, 48, 63, 1),
+            color: const Color.fromRGBO(1,171,230,1),
             padding: const EdgeInsets.all(8),
             child: Row(
               mainAxisSize: MainAxisSize.max,

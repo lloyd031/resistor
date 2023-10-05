@@ -11,6 +11,7 @@ class Component
   bool reference=false;
   Component? branch;
   int kclindex=0;
+  var kcleqn;
   List<Component> eqn=[];
   Component(this.type)
   {
@@ -33,5 +34,15 @@ class Component
     connection.add(comp!);
   }
   
+  void kcl()
+  {
+    for(Component i in eqn)
+    {
+      if(i.current==0)
+      {
+        
+      }
+    }
+  }
   
 }
