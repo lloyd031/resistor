@@ -84,6 +84,7 @@ class NodalAnalysis
           }
         }
       }else{
+        
         branch.addConnection(comp);
         comp.eqn.add(branch);
         currNode!.eqn.add(branch);
@@ -146,23 +147,44 @@ class NodalAnalysis
 
  void assignVoltages()
  {
+  String err="";
     for(Component i in branchlist)
-    {
-      if(i.connection.last.reference==true)
-        {
-          if(i.voltage !=0 && i.resistance==0 && i.current==0)
-          {
-            
-              if(i.connection.first.voltage==0)
-              {
-                i.connection.first.voltage=i.voltage;
-                node.remove(i.connection.first);
-              }
-          }
-        }
+				{
+					if(i.voltage!=0 && i.current==0 && i.resistance==0 &&  i.connection.last.reference==true)
+					{
+							
+							i.connection.first.voltage=i.voltage;
+							node.remove(i.connection.first);
+						
+					}
+				}
 
-
-    }
+    for(Component i in branchlist)
+				{
+					if(i.voltage!=0 && i.current==0 && i.resistance==0 &&  i.connection.last.reference==false)
+					{
+						if(i.connection.last.voltage!=0 && i.connection.first.voltage==0)
+						{
+							i.connection.first.voltage=i.voltage;
+							i.connection.first.voltage+=i.connection.last.voltage;
+							node.remove(i.connection.first);
+						}else if(i.connection.first.voltage!=0 && i.connection.last.voltage==0)
+						{
+							i.connection.last.voltage=(i.voltage*-1);
+							i.connection.last.voltage+= i.connection.first.voltage;
+							node.remove(i.connection.last);
+						}else if(i.connection.first.voltage!=0 && i.connection.last.voltage!=0)
+						{
+							err="Error: Voltage loop detected";
+              print(err);
+						}else if(i.connection.first.voltage==0 && i.connection.last.voltage==0)
+						{
+							err="Error: Cannot solve supernode, we'll try to fix this";
+              print(err);
+						}
+							
+					}
+				}
     
     setKCLIndex();
  }
@@ -179,10 +201,12 @@ void setKCLIndex()
 void setMatrix()
 {
  matrix = List<List>.generate(node.length, (i) => List<dynamic>.generate(node.length+1, (doublex) => 0.0, growable: false), growable: false);
- 
-for(Component i in node)
+ for(Component i in node)
  {
   i.kcleqn=List.generate(node.length+1, (double) => 0.0);
+ }
+for(Component i in node)
+ {
   i.kcl();
   print("node ${i.kcleqn}");
  }

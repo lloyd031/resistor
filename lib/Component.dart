@@ -38,21 +38,65 @@ class Component
   {
     for(Component i in eqn)
     {
-      if(i.current==0)
-      {
-        kcleqn[kclindex]+=(i.connection.first==this)?(1/i.resistance*-1):(1/i.resistance);
-        if(i.voltage!=0)
-        {
-         kcleqn.last+=(i.connection.first==this)?(i.voltage/i.resistance)*-1:i.voltage/i.resistance;
-        }
-        if(i.connection.last!=this && i.connection.last.voltage!=0)
-        {
-          kcleqn.last+=(i.connection.last.voltage/i.resistance)*-1;
-        }else if(i.connection.first!=this && i.connection.first.voltage!=0)
-        {
-          kcleqn.last+=(i.connection.first.voltage/i.resistance);
-        }
-      }
+      if(i.connection.first==this)
+		  {
+			 
+			   if(i.current==0)			  
+			   {
+				   kcleqn[kclindex]+=(1/i.resistance*-1);
+				   if(i.connection.last.reference==false)
+				   {
+					 if(i.connection.last.voltage==0)
+					 {
+						 kcleqn[i.connection.last.kclindex]+=1/i.resistance;
+					 }else 
+					 {
+            kcleqn.last+=(i.connection.last.voltage/i.resistance)*-1;
+						//this.setConstant(i.getConnection().getLast().getVoltage()*-1,i.getResistance());
+					 }
+				   }
+				   if(i.voltage!=0)
+					  {
+						 kcleqn.last=i.voltage/i.resistance*-1;
+						 //this.setConstant(i.getVoltage()*-1,i.getResistance());
+					  }
+			   }else
+			   {
+          kcleqn.last+=i.current*-1;
+				   //this.setConstant(i.getCurrent()*-1,1);
+			   }
+
+			
+		  }else  
+		  {	  
+
+			  
+			  if(i.current==0)
+			  {
+				  kcleqn[kclindex]+=(1/i.resistance*-1);
+				  if(i.connection.first.voltage==0)
+				  {
+					  kcleqn[i.connection.first.kclindex]+=1/i.resistance;
+				  }else
+				  {
+            kcleqn.last+=i.connection.first.voltage/i.resistance*-1;
+					  //setConstant(i.getConnection().getFirst().getVoltage()*-1,i.getResistance());
+					 
+				  }
+				  
+				  if(i.voltage!=0)
+				  {
+          kcleqn.last+=i.voltage/i.resistance*-1;
+					//setConstant(i.getVoltage(),i.getResistance());
+				  }
+			  }else
+			  {
+           kcleqn.last+=i.current;
+				  //setConstant(i.getCurrent(),1);
+
+			  }
+		 
+	  }
     }
   }
   
