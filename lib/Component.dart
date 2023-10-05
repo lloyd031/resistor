@@ -57,7 +57,7 @@ class Component
 				   }
 				   if(i.voltage!=0)
 					  {
-						 kcleqn.last=i.voltage/i.resistance*-1;
+						 kcleqn.last+=i.voltage/i.resistance*-1;
 						 //this.setConstant(i.getVoltage()*-1,i.getResistance());
 					  }
 			   }else
@@ -86,7 +86,7 @@ class Component
 				  
 				  if(i.voltage!=0)
 				  {
-          kcleqn.last+=i.voltage/i.resistance*-1;
+          kcleqn.last+=i.voltage/i.resistance;
 					//setConstant(i.getVoltage(),i.getResistance());
 				  }
 			  }else

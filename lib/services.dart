@@ -112,9 +112,9 @@ class NodalAnalysis
         {
           if(i.connection[j].head==i.connection[j-1])
           {
-            i.voltage+=i.connection[j].voltage;
-          }else{
             i.voltage-=i.connection[j].voltage;
+          }else{
+            i.voltage+=i.connection[j].voltage;
           }
         }else if(i.connection[j].type=="Current")
         {
