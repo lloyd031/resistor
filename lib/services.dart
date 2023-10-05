@@ -178,13 +178,14 @@ void setKCLIndex()
 
 void setMatrix()
 {
- matrix = List<List>.generate(node.length, (i) => List<dynamic>.generate(node.length+1, (index) => 0, growable: false), growable: false);
- for(Component i in node)
+ matrix = List<List>.generate(node.length, (i) => List<dynamic>.generate(node.length+1, (doublex) => 0.0, growable: false), growable: false);
+ 
+for(Component i in node)
  {
-  i.kcleqn=matrix[i.kclindex];
+  i.kcleqn=List.generate(node.length+1, (double) => 0.0);
+  i.kcl();
   print("node ${i.kcleqn}");
  }
-
 }
 
 

@@ -40,7 +40,11 @@ class Component
     {
       if(i.current==0)
       {
-        
+        kcleqn[kclindex]=(i.connection.first==this)?1/i.resistance:(1/i.resistance)*-1;
+        if(i.voltage!=0)
+        {
+         i.kcleqn[kcleqn.length]=(i.connection.first==this)?(i.voltage)*-1:i.voltage;
+        }
       }
     }
   }
