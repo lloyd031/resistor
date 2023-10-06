@@ -60,7 +60,7 @@ class _LoadingState extends State<Loading> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Container(
-                  child: Text("OUTPUT",style: const TextStyle(fontWeight: FontWeight.bold),)),
+                  child: Text("OUTPUT",style: const TextStyle(fontWeight: FontWeight.w900,fontSize: 12),)),
               ],
             ),
             const SizedBox(height: 6,),
@@ -71,9 +71,16 @@ class _LoadingState extends State<Loading> {
           color:Colors.white,
           height: 100,
           child: const Center(
-            child: SpinKitDoubleBounce(
-              color:Color.fromRGBO(132,90,254,1),
-              size: 50,
+            child: Column(
+              children: [
+                SizedBox(height:10),
+                SpinKitDoubleBounce(
+                  color: const Color.fromRGBO(1,171,230,1),
+                  size: 50,
+                ),
+                SizedBox(height:10),
+                Text("Loading...", style: TextStyle(fontStyle: FontStyle.italic),),
+              ],
             ),
           ),
         ),
@@ -93,7 +100,7 @@ class ErrMessage extends StatelessWidget {
         width: double.maxFinite,
         padding: const EdgeInsets.all(6),
         color:Colors.red[50],
-        child:Text("Error: $msg" , style: const TextStyle(fontSize: 14,color: Color.fromRGBO(255, 80, 164, 1)),),
+        child:Text("Error: $msg" , style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14,color: Color.fromRGBO(255, 80, 164, 1)),),
       ),
     );
   }

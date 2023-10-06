@@ -151,8 +151,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   void _showRes()
   {
-    showModalBottomSheet(context: context, builder:(context){
-      return Loading(complist);
+    showModalBottomSheet(isScrollControlled: true, context: context, builder:(context){
+      return Wrap(children: [Loading(complist)]);
     });
   }
   void addComp(Component comp)
@@ -288,6 +288,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
           Expanded(
             child: SingleChildScrollView(
+              controller: ScrollController(
+                initialScrollOffset: 200,
+              ),
               scrollDirection: Axis.vertical,
               child: Column(
                 children: [
@@ -296,6 +299,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     width: double.maxFinite,
                     height: 900,
                     child: SingleChildScrollView(
+                      controller: ScrollController(
+                        initialScrollOffset: 500,
+                      ),
                       scrollDirection: Axis.horizontal,
                       child: Container(
                         width: 3000,
