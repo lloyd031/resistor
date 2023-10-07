@@ -34,7 +34,7 @@ class Component
     connection.add(comp!);
   }
   
-  void kcl()
+  List kcl()
   {
     for(Component i in eqn)
     {
@@ -98,6 +98,8 @@ class Component
 		 
 	  }
     }
+    List l=kcleqn;
+    return l;
   }
   
 }

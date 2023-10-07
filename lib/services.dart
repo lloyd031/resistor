@@ -205,12 +205,19 @@ void setMatrix()
  {
   i.kcleqn=List.generate(node.length+1, (double) => 0.0);
  }
-for(Component i in node)
+for(int i=0; i<node.length;i++)
  {
-  i.kcl();
-  print("node ${i.kcleqn}");
+  matrix[i]=node[i].kcl();
+  
  }
+ print("kcl output");
+  print(matrix);
 }
 
+
+}
+
+class MatrixAnalysis
+{
 
 }

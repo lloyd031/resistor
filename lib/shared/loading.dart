@@ -56,16 +56,17 @@ class _LoadingState extends State<Loading> {
       child:  Center(
         child:(loading==false)?Column(
           children: [
-             Row(
+             const Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  child: Text("OUTPUT",style: const TextStyle(fontWeight: FontWeight.w900,fontSize: 12),)),
+                Text("OUTPUT",style: TextStyle(fontWeight: FontWeight.w900,fontSize: 12),),
               ],
             ),
             const SizedBox(height: 6,),
             for(String i in errlist)
-            ErrMessage(msg: i)
+            ErrMessage(msg: i),
+
+            const SizedBox(height: 50,),
           ],
         ):  Container(
           color:Colors.white,

@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:resistor/splash.dart';
 
 void main() {
-  runApp(const MyApp());
+  //WidgetsFlutterBinding.ensureInitialized();
+  //final initFuture=MobileAds.instance.initialize();
+  //final adState=AdState(initFuture);
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
