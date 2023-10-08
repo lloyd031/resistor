@@ -51,7 +51,7 @@ class NodalAnalysis
         node.add(i);
       }
     }
-    print("you got ${node.length} nodes");
+    
   }
 
   void defineBranches()
@@ -99,7 +99,6 @@ class NodalAnalysis
   {
     String err="";
     String connection="";
-    print("you got ${branchlist.length}");
     for(Component i in branchlist)
     {
       for(int j=0; j<i.connection.length; j++)
@@ -135,17 +134,12 @@ class NodalAnalysis
       
       
     }
-    for(Component i in branchlist)
-    {
-      connection+=" ${i.voltage} , ${i.resistance}";
-      print(connection);
-      connection="";
-    }
+    
     return Future.delayed(Duration(microseconds: 500),()=>err);
   }
   
 
- void assignVoltages()
+ Future<String> assignVoltages()
  {
   String err="";
     for(Component i in branchlist)
@@ -186,19 +180,20 @@ class NodalAnalysis
 					}
 				}
     
-    setKCLIndex();
+    return Future.delayed(Duration(microseconds: 500),()=>err);
  }
 
-void setKCLIndex()
+List setKCLIndex()
 {
   for(int i=0; i<node.length; i++)
   {
     node[i].kclindex=i;
   }
-  setMatrix();
+  List mat = setMatrix();
+  return mat;
 }
 
-void setMatrix()
+List setMatrix()
 {
  matrix = List<List>.generate(node.length, (i) => List<dynamic>.generate(node.length+1, (doublex) => 0.0, growable: false), growable: false);
  for(Component i in node)
@@ -208,10 +203,8 @@ void setMatrix()
 for(int i=0; i<node.length;i++)
  {
   matrix[i]=node[i].kcl();
-  
  }
- print("kcl output");
-  print(matrix);
+ return matrix;
 }
 
 
@@ -219,5 +212,56 @@ for(int i=0; i<node.length;i++)
 
 class MatrixAnalysis
 {
+  List? matrix;
+   MatrixAnalysis(this.matrix);
+Future<List> startAnalysis()
+{
+  
+    int n=matrix!.length;
+    var tempmat=List.generate(matrix!.length+1, (i) => 0.0, growable: false);
+    var res=List.generate(n, (index) => 0.0);
+    for(int i=0; i<n; i++)
+    {
+      for(int j=i; j<n; j++)
+      {
+        if(j==i)
+        {
+          double pivot=matrix![i][j];
+          for(int k=0; k<n; k++)
+          {
+            matrix![j][k]/=pivot;
+            tempmat[k]=matrix![j][k];  
+          }
+          
+          matrix![j][n]/=pivot;
+          tempmat[n]=matrix![j][n];
+        }else
+        {
+          double pivot=matrix![j][i];
+    			for(int k=0; k<n; k++)
+    			{
+    				matrix![j][k]+=pivot*tempmat[k]*-1;
+    			}
+            matrix![j][n]+=pivot*tempmat[n]*-1;
+        }
+      }
+    }
+  
 
+  res[n-1]=matrix![n-1][n];
+  for(int i=n-1; i>=0; i--)
+       {
+    	   if(i!=n-1)
+    	   {
+    		   for(int j=0; j<n; j++)
+        	   {
+        		 matrix![i][n]-=res[j]*matrix![i][j];
+        	   }
+    		   res[i]= matrix![i][n];
+    	   } 
+		   
+       }  
+   
+  return Future.delayed(Duration(milliseconds: 500),()=>res);
+}
 }

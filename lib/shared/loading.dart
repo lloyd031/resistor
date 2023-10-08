@@ -42,7 +42,20 @@ class _LoadingState extends State<Loading> {
           });
         }else
         {
-          nodalAnalysis.assignVoltages();
+          String av=await nodalAnalysis.assignVoltages();
+          if(av=="")
+          {
+            List mat=nodalAnalysis.setKCLIndex();
+            MatrixAnalysis ma= MatrixAnalysis(mat);
+            dynamic analysis=await ma.startAnalysis();
+            print(analysis);
+          }else
+          {
+            setState(() {
+            loading=false;
+            errlist.add(av);
+          });
+          }
         }
     }
     }
