@@ -33,8 +33,8 @@ class _DraggableButtonState extends State<DraggableButton> {
                                     height:11,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(11),
-                                      color:Colors.white,
-                                      border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                      color:const Color.fromRGBO(35,35, 35, 1),
+                                      border: Border.all(color: const Color.fromRGBO(169, 169, 169, 1), width: 2.5)
                                       
                                     ),
                                     
@@ -49,8 +49,8 @@ class _DraggableButtonState extends State<DraggableButton> {
                                     height:11,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(11),
-                                      color:Colors.white,
-                                      border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                      color:const Color.fromRGBO(35,35, 35, 1),
+                                      border: Border.all(color: const Color.fromRGBO(169, 169, 169, 1), width: 2.5)
                                       
                                     ),
                                     

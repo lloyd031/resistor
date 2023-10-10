@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
+import '../Component.dart';
 import '../services.dart';
 
 class Loading extends StatefulWidget {
@@ -38,7 +39,7 @@ class _LoadingState extends State<Loading> {
         {
           setState(() {
             loading=false;
-            errlist.add(solveVRI);
+
           });
         }else
         {
@@ -47,14 +48,34 @@ class _LoadingState extends State<Loading> {
           {
             List mat=nodalAnalysis.setKCLIndex();
             MatrixAnalysis ma= MatrixAnalysis(mat);
-            dynamic analysis=await ma.startAnalysis();
-            print(analysis);
+            List analysis=await ma.startAnalysis();
+             
+            bool res = await nodalAnalysis.assignVontalagestoNodes(analysis);
+            if(res==true)
+            {
+              setState(() {
+              loading=false;
+          });
+            }
           }else
           {
+            if(av=="0 nodes")
+            {
+              dynamic svi=await nodalAnalysis.solveI();
+              if(svi==true)
+              {
+                setState(() {
+                loading=false;
+              });
+              }
+            }else
+            {
             setState(() {
             loading=false;
             errlist.add(av);
           });
+            }
+            
           }
         }
     }
@@ -64,10 +85,12 @@ class _LoadingState extends State<Loading> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8),
+      padding: const EdgeInsets.all(8),
       color:Colors.white,
       child:  Center(
-        child:(loading==false)?Column(
+        child:Column(
+          children: [
+            (loading==false)?Column(
           children: [
              const Row(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -76,27 +99,44 @@ class _LoadingState extends State<Loading> {
               ],
             ),
             const SizedBox(height: 6,),
-            for(String i in errlist)
-            ErrMessage(msg: i),
-
-            const SizedBox(height: 50,),
-          ],
-        ):  Container(
-          color:Colors.white,
-          height: 100,
-          child: const Center(
-            child: Column(
-              children: [
-                SizedBox(height:10),
-                SpinKitDoubleBounce(
-                  color: const Color.fromRGBO(1,171,230,1),
-                  size: 50,
-                ),
-                SizedBox(height:10),
-                Text("Loading...", style: TextStyle(fontStyle: FontStyle.italic),),
+            Column(
+              children: (errlist.isEmpty)?[
+                for(Component i in widget.complist!)
+                   (i.type!="Resistor")?const SizedBox():ErrMessage(msg: "${i.name} (${i.resistance}) ${i.current}"),
+              ]:[
+              for(String i in errlist)
+              ErrMessage(msg: i),
               ],
             ),
+            
+          ],
+        ):  Container(
+            color:Colors.white,
+            height: 100,
+            child: const Center(
+         child: Column(
+           children: [
+             Column(
+               children: [
+                 SizedBox(height:10),
+                 SpinKitDoubleBounce(
+                   color:  Color.fromRGBO(1,171,230,1),
+                   size: 50,
+                 ),
+                 SizedBox(height:10),
+                 Text("Loading...", style: TextStyle(fontStyle: FontStyle.italic),),
+                 SizedBox(height: 10,),
+                 
+               ],
+             ),
+             
+           ],
+         ),
+            ),
           ),
+          SizedBox(height: 50,),
+          ],
+          
         ),
       ),
     );

@@ -33,7 +33,21 @@ class Component
   {
     connection.add(comp!);
   }
-  
+ void reset()
+               {
+                     branch=null;
+                    if(type=="Resistor")
+                          {
+                            voltage=0;
+                            current=0;
+                          }else if(type=="wire")
+                          {
+                            kcleqn=List.generate(1, (index) => 0.0);
+                            kclindex=0;
+                            eqn.clear();
+                            voltage=0;
+                          }
+             }
   List kcl()
   {
     for(Component i in eqn)

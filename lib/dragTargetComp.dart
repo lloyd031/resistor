@@ -195,7 +195,7 @@ class _DragTargetCompState extends State<DragTargetComp> {
                         height: 60,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
-                          color: const Color.fromRGBO(228, 230, 235, 1),
+                          color: const Color.fromRGBO(56, 56, 56, 1),
                         ),
                       )
                     : InkWell(
@@ -209,7 +209,7 @@ class _DragTargetCompState extends State<DragTargetComp> {
                               child: Container(
                             width: 2,
                             height: 2,
-                            color: Colors.grey,
+                            color: const Color.fromRGBO(56, 56, 56, 1),
                           )),
                         ),
                       )),
@@ -283,8 +283,8 @@ class _DragTargetCompState extends State<DragTargetComp> {
                                   height:12,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(11),
-                                    color:(tail==true)?Colors.blue[200]:Colors.white,
-                                    border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                    color:(tail==true)?const Color.fromRGBO(169, 169, 169, 1):const Color.fromRGBO(35,35, 35, 1),
+                                    border: Border.all(color: const Color.fromRGBO(169, 169, 169, 1), width: 2.5)
                                     
                                   ),
                                   
@@ -319,8 +319,8 @@ class _DragTargetCompState extends State<DragTargetComp> {
                                   height:12,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(11),
-                                    color:(head==true)?Colors.blue[200]:Colors.white,
-                                    border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                    color:(head==true)?const Color.fromRGBO(169, 169, 169, 1):const Color.fromRGBO(35,35, 35, 1),
+                                    border: Border.all(color: const Color.fromRGBO(169, 169, 169, 1), width: 2.5)
                                     
                                   ),
                                   
@@ -356,8 +356,8 @@ class _DragTargetCompState extends State<DragTargetComp> {
                                   height:12,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(11),
-                                    color:(tail==true)?Colors.blue[200]:Colors.white,
-                                    border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                    color:(tail==true)?const Color.fromRGBO(169, 169, 169, 1):const Color.fromRGBO(35,35, 35, 1),
+                                    border: Border.all(color: const Color.fromRGBO(169, 169, 169, 1), width: 2.5)
                                     
                                   ),
                                   
@@ -384,8 +384,8 @@ class _DragTargetCompState extends State<DragTargetComp> {
                                   height:11,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(11),
-                                    color:Colors.white,
-                                    border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                    color:const Color.fromRGBO(35,35, 35, 1),
+                                    border: Border.all(color: const Color.fromRGBO(169, 169, 169, 1), width: 2.5)
                                     
                                   ),
                                   
@@ -401,8 +401,8 @@ class _DragTargetCompState extends State<DragTargetComp> {
                                   height:11,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(11),
-                                    color:Colors.white,
-                                    border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                    color:const Color.fromRGBO(35,35, 35, 1),
+                                    border: Border.all(color:const Color.fromRGBO(169, 169, 169, 1), width: 2.5)
                                     
                                   ),
                                   
@@ -435,8 +435,8 @@ class _DragTargetCompState extends State<DragTargetComp> {
                                   height:11,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(11),
-                                    color:Colors.white,
-                                    border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                    color:Colors.transparent,
+                                    border: Border.all(color: const Color.fromRGBO(169, 169, 169, 1), width: 2.5)
                                     
                                   ),
                                   
@@ -452,8 +452,8 @@ class _DragTargetCompState extends State<DragTargetComp> {
                                   height:11,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(11),
-                                    color:Colors.white,
-                                    border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                    color:Colors.transparent,
+                                    border: Border.all(color: const Color.fromRGBO(169, 169, 169, 1), width: 2.5)
                                     
                                   ),
                                   
@@ -491,8 +491,8 @@ class GroundModel extends StatelessWidget {
                                    height:12,
                                    decoration: BoxDecoration(
                                      borderRadius: BorderRadius.circular(11),
-                                     color:(tail==true)?Colors.blue[200]:Colors.white,
-                                     border: Border.all(color: const Color.fromRGBO(1, 48, 63, 1), width: 2.5)
+                                     color:(tail==true)?const Color.fromRGBO(169, 169, 169, 1):Colors.transparent,
+                                     border: Border.all(color: const Color.fromRGBO(169, 169, 169, 1), width: 2.5)
                                      
                                    ),
                                    

@@ -43,6 +43,7 @@ class _MyHomePageState extends State<MyHomePage> {
     }else{
       if(comp==null || origincomp!.index!=comp.index)
       {
+      
       Line curr= Line(armIndex,null);
       setState(() {
         target=Line(i,null);
@@ -125,10 +126,10 @@ class _MyHomePageState extends State<MyHomePage> {
         origincomp!.addConnection(line.wire);
         if(pol[0]=="head")
         {
-          origincomp!.head=target!.wire;
+          origincomp!.head=line.wire;
         }else
         {
-          origincomp!.tail=target!.wire;
+          origincomp!.tail=line.wire;
         }
 
         if(origincomp!.type=="ground")
@@ -229,7 +230,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
    
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(241, 242, 246, 1),
+      backgroundColor: const Color.fromRGBO(30,30, 30, 1),
       appBar: AppBar(
         title: const Text(
           "Resistor",
@@ -270,6 +271,12 @@ class _MyHomePageState extends State<MyHomePage> {
                         });
                         _showRes();
                          
+                       }else
+                       {
+                        for(Component j in complist)
+                        {
+                          j.reset();
+                        }
                        }
                       run((running == false) ? true : false);
                        
@@ -306,7 +313,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       child: Container(
                         width: 3000,
                         height: double.infinity,
-                        color: Colors.white,
+                        color: const Color.fromRGBO(35,35, 35, 1),
                         child: GridView.builder(
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(

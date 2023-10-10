@@ -33,6 +33,8 @@ class CheckErr
   }
  return Future.delayed(Duration(seconds: 5),()=> err);
 }
+
+
 }
 class NodalAnalysis
 {
@@ -72,7 +74,7 @@ class NodalAnalysis
   {
     if(comp.branch==null)
     {
-      if(comp.connection.length<3)
+      if(comp.connection.length<3 && comp.reference==false)
       {
         branch.addConnection(comp);
         comp.branch=branch;
@@ -89,6 +91,7 @@ class NodalAnalysis
         comp.eqn.add(branch);
         currNode!.eqn.add(branch);
         branchlist.add(branch);
+        
       }
     }
   }
@@ -138,6 +141,7 @@ class NodalAnalysis
     return Future.delayed(Duration(microseconds: 500),()=>err);
   }
   
+  
 
  Future<String> assignVoltages()
  {
@@ -149,10 +153,10 @@ class NodalAnalysis
 							
 							i.connection.first.voltage=i.voltage;
 							node.remove(i.connection.first);
-						
+						  
 					}
 				}
-
+     
     for(Component i in branchlist)
 				{
 					if(i.voltage!=0 && i.current==0 && i.resistance==0 &&  i.connection.last.reference==false)
@@ -179,7 +183,10 @@ class NodalAnalysis
 							
 					}
 				}
-    
+    if(node.isEmpty)
+    {
+      err="0 nodes";
+    }
     return Future.delayed(Duration(microseconds: 500),()=>err);
  }
 
@@ -190,6 +197,7 @@ List setKCLIndex()
     node[i].kclindex=i;
   }
   List mat = setMatrix();
+  
   return mat;
 }
 
@@ -203,10 +211,32 @@ List setMatrix()
 for(int i=0; i<node.length;i++)
  {
   matrix[i]=node[i].kcl();
+  print(matrix[i]);
  }
+ 
  return matrix;
 }
+Future<bool> assignVontalagestoNodes(List a)async
+  {
+    for(int i=0; i<node.length; i++)
+    {
+      node[i].voltage=a[i];
+    }
+    bool res= await solveI();
+    return Future.delayed(Duration(microseconds: 500),()=>res);
+  }
 
+  Future<bool> solveI()
+  {
+    for(Component i in complist!)
+    {
+      if(i.type=="Resistor")
+      {
+        i.current=(i.branch!.connection.first.voltage-i.branch!.voltage-i.branch!.connection.last.voltage)/i.branch!.resistance;
+      }
+    }
+    return Future.delayed(Duration(milliseconds: 500),()=>true);
+  }
 
 }
 
