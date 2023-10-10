@@ -207,8 +207,8 @@ class _DragTargetCompState extends State<DragTargetComp> {
                           height: 60,
                           child: Center(
                               child: Container(
-                            width: 2,
-                            height: 2,
+                            width: 3,
+                            height: 3,
                             color: const Color.fromRGBO(56, 56, 56, 1),
                           )),
                         ),
